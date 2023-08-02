@@ -27,9 +27,12 @@ public class Post extends BaseEntity{
     private String postContent;
 
     private int likesCount;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    private Set<Comment> comments;
+
 
 }

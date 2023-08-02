@@ -19,13 +19,12 @@ import java.util.Set;
 @Builder
 public class Comment extends BaseEntity{
 
-
+    private String commentId;
     @Column(name = "commenter_name", nullable = false)
     private String commenterName;
 
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
-
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;

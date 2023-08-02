@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-
 public class SwaggerConfig {
 
     @Bean
@@ -18,9 +17,9 @@ public class SwaggerConfig {
         final String securitySchemaName = "bearerAuth";
         return new OpenAPI()
                 .info(new Info()
-                        .title("Reservly App API")
+                        .title("Social Media API")
                         .version("1.1")
-                        .description("Reservly App API Documentation")
+                        .description("Social Media API Documentation")
                 )
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemaName))
                 .components(new Components()
