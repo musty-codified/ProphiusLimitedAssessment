@@ -17,14 +17,6 @@ public class AppUtils {
         return generateRandomString(length);
     }
 
-    public String generateCommentId(int length){
-        return generateRandomString(length);
-    }
-
-    public String generatePostId(int length){
-        return generateRandomString(length);
-    }
-
     public String getFormattedNumber(final String number){
         String trimmedNumber = number.trim();
         String formattedNumber = null;

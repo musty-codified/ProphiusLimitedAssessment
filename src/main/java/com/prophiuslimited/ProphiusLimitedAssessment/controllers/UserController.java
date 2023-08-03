@@ -36,14 +36,17 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<Object>> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                        @RequestParam(value = "limit", defaultValue = "5") int limit) {
-        List<UserResponseDto> userResponseDtos = userService.getUsers(page, limit);
+    public ResponseEntity<ApiResponse<Object>> getUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "limit", defaultValue = "5") int limit,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+                                                        ) {
+        List<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
         return responseManager.success(userResponseDtos);
-
     }
 
-    @PutMapping("delete/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Object>> updateUser(@PathVariable String id,
                                                           @RequestBody @Valid UpdateUserRequestDto request) {
         UserResponseDto userResponseDto = userService.updateUser(id, request);

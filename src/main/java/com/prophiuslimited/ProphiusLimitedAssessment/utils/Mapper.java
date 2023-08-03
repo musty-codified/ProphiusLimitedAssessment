@@ -1,7 +1,9 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.utils;
 
 
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UserResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,15 @@ public class Mapper {
                 .userId(user.getUserId())
                 .userName(user.getUsername())
                 .email(user.getEmail())
+                .build();
+    }
+
+    public static PostResponseDto toPostDto(Post post) {
+        return PostResponseDto.builder()
+                .content(post.getContent())
+                .likesCount(post.getLikesCount())
+                .username(post.getUser().getUsername())
+                .userId(post.getUser().getUserId())
                 .build();
     }
 }

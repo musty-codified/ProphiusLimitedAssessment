@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -59,16 +60,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDto> getUsers(int page, int limit) {
+    public List<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
         List<UserResponseDto> returnValue = new ArrayList<>();
 
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                :Sort.by(sortBy).descending();
+
         if(page>0) page = page-1;
-        Pageable pageableRequest = PageRequest.of(page,limit);
+        Pageable pageableRequest = PageRequest.of(page, limit, sort);
         Page<User> userPage = userRepository.findAll(pageableRequest);
         List<User> users = userPage.getContent();
 
         for (User user : users){
-
             User.builder()
                     .userId(user.getUserId())
                     .username(user.getUsername())
@@ -82,7 +85,7 @@ public class UserServiceImpl implements UserService {
         return returnValue;
     }
 
-    //Use Setters instead of builders for updating recors
+    //Use Setters instead of builders for updating records
     @Override
     public UserResponseDto updateUser(String id, UpdateUserRequestDto updateRequestDto) {
         User user = userRepository.findByUserId(id).

@@ -18,7 +18,9 @@ import java.util.Set;
 @Builder
 public class User extends BaseEntity implements Serializable {
 
-     private String userId;
+    @Column(nullable = false, unique = true)
+    private String userId;
+
     @Column(nullable = false, length = 50)
     private String username;
     @Email
@@ -31,7 +33,7 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 50)
     private String profilePicture;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> posts ;
 
 }

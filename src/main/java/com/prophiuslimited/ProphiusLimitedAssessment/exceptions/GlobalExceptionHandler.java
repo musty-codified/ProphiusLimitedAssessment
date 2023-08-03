@@ -35,6 +35,14 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(value = {UnauthorizedUserException.class})
+    public ResponseEntity<Object> handleUnauthorizedUserException(UnauthorizedUserException ex, WebRequest request) {
+        ErrorResponse errorMessage = new ErrorResponse(new Date(), ex.getMessage());
+        errorMessage.setDebugMessage("You're not authorized to update this post");
+
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherServiceException(Exception ex, WebRequest request) {
         ErrorResponse errorMessage = new ErrorResponse(new Date(), ex.getMessage());

@@ -19,19 +19,16 @@ import java.util.Set;
 @Builder
 public class Post extends BaseEntity{
 
-
-    @Column(length = 50, nullable = false)
-    private String author;
-
     @Column(length = 500, nullable = false)
-    private String postContent;
+    private String content;
 
+    @Column(nullable = false)
     private int likesCount;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
 

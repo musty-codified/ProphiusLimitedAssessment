@@ -10,7 +10,7 @@ public interface UserService {
     UserResponseDto signUp(SignupRequestDto signupRequest);
     UserResponseDto getUser(String id);
 
-    List<UserResponseDto> getUsers(int page, int limit);
+    List<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir);
 
     UserResponseDto updateUser(String id, UpdateUserRequestDto updateRequestDto);
     void deleteUser(String id);
