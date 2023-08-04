@@ -33,7 +33,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     private final UserRepository userRepository;
-    private final Logger logger = LoggerFactory.getLogger(PostController.class);
+    private final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Override
     public PostResponseDto createPost(String id, PostRequestDto postRequest) {

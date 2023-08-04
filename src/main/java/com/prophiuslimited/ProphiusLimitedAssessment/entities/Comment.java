@@ -17,13 +17,11 @@ public class Comment extends BaseEntity{
     @Column(nullable = false)
     private String body;
 
-    private Long postId;
-    private Long userId;
+    private String userId;
     private String username;
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id", nullable = false)
     private Post post;
-
 
 
 }
