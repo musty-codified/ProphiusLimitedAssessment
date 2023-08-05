@@ -21,43 +21,45 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping("/{id}/posts/{postId}/comments")
-    public ResponseEntity<ApiResponse<Object>> createPost(@PathVariable String id, @PathVariable Long postId,
-                                                          @RequestBody @Valid CommentRequestDto commentRequest) {
-        CommentResponseDto commentResponseDto = commentService.createComment(id, postId, commentRequest);
+    @PostMapping("/{userId}/posts/{postId}/comments")
+    public ResponseEntity<ApiResponse<Object>> createComment(@PathVariable String userId, @PathVariable Long postId,
+                                                             @RequestBody @Valid CommentRequestDto commentRequest) {
+        CommentResponseDto commentResponseDto = commentService.createComment(userId, postId, commentRequest);
 
         return responseManager.success(commentResponseDto);
     }
 
-    @GetMapping("/{id}/posts/{postId}/comments/{commentId}")
-    public ResponseEntity<ApiResponse<Object>> getComment(@PathVariable String id, @PathVariable Long postId,
+    @GetMapping("/{userId}/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<ApiResponse<Object>> getComment(@PathVariable String userId, @PathVariable Long postId,
                                                           @PathVariable Long commentId) {
-        CommentResponseDto commentResponseDto = commentService.getComment(id, postId, commentId);
+        CommentResponseDto commentResponseDto = commentService.getComment(userId, postId, commentId);
         return responseManager.success(commentResponseDto);
 
     }
 
-    @GetMapping("/{id}/posts/{postId}/comments")
-    public ResponseEntity<ApiResponse<Object>> getComments(@PathVariable String id, @PathVariable Long postId,
+    @GetMapping("/{userId}/posts/{postId}/comments")
+    public ResponseEntity<ApiResponse<Object>> getComments(@PathVariable String userId, @PathVariable Long postId,
                                                            @RequestParam(value = "page", defaultValue = "0") int cPage,
-                                                        @RequestParam(value = "limit", defaultValue = "5") int cLimit) {
-        List<CommentResponseDto> commentResponseDtos = commentService.getComments(id, cPage, cLimit);
+                                                           @RequestParam(value = "limit", defaultValue = "5") int cLimit,
+                                                           @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+                                                           @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        List<CommentResponseDto> commentResponseDtos = commentService.getComments(userId, postId, cPage, cLimit, sortBy, sortDir);
         return responseManager.success(commentResponseDtos);
 
     }
 
-    @PutMapping("/{id}/posts/{postId}/comments/{commentId}")
-    public ResponseEntity<ApiResponse<Object>> updateComment(@PathVariable String id, @PathVariable Long postId,
+    @PutMapping("/{userId}/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<ApiResponse<Object>> updateComment(@PathVariable String userId, @PathVariable Long postId,
                                                              @PathVariable Long commentId, @RequestBody @Valid CommentRequestDto commentRequest) {
-        CommentResponseDto commentResponseDto = commentService.updateComment(id, postId,commentId, commentRequest);
+        CommentResponseDto commentResponseDto = commentService.updateComment(userId, postId,commentId, commentRequest);
         return responseManager.success(commentResponseDto);
 
     }
 
-    @DeleteMapping("/{id}/posts/{postId}/comments/{commentId}/delete")
-    public ResponseEntity <HttpStatus> deleteComment(@PathVariable String id, @PathVariable Long postId,
-                                                  @PathVariable Long commentId){
-        commentService.deleteComment(id, postId, commentId);
+    @DeleteMapping("/{userId}/posts/{postId}/comments/{commentId}/delete")
+    public ResponseEntity <HttpStatus> deleteComment(@PathVariable String userId, @PathVariable Long postId,
+                                                     @PathVariable Long commentId){
+        commentService.deleteComment(userId, postId, commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

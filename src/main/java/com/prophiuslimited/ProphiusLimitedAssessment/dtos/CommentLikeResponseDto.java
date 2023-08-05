@@ -6,21 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentResponseDto {
-    private String body;
+public class CommentLikeResponseDto {
 
-    private String userId;
-
+    private Long id;
+    private boolean liked;
+    private int likesCount;
     private Long postId;
-
-    private String username;
-
-    private List<CommentLikeResponseDto> commentLikeResponses;
-
+    private String userId;
 }

@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,11 +29,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
-        boolean isEmail = userRepository.existsByEmail(signupRequest.getEmail());
+        boolean emailExist = userRepository.existsByEmail(signupRequest.getEmail());
 
-        if (isEmail)
-            throw new RecordAlreadyExistException("Record already exist in db");
-        User user =  User.builder()
+        if (emailExist)
+            throw new RecordAlreadyExistException("Record already exist in database");
+        User user = User.builder()
                 .userId(appUtil.generateUserId(10))
                 .email(signupRequest.getEmail())
                 .password(signupRequest.getPassword())
@@ -48,14 +47,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUser(String id) {
-      User user =  userRepository.findByUserId(id)
-                .orElseThrow(()-> new UserNotFoundException("User with ID " + id + " not found"));
-         User.builder()
-                .userId(id)
-                .email(user.getEmail())
-                .username(user.getUsername())
-                 .build();
+    public UserResponseDto getUser(String userId) {
+      User user =  userRepository.findByUserId(userId)
+                .orElseThrow(()-> new UserNotFoundException("User with ID " + userId + " not found"));
         return Mapper.toUserDto(user);
     }
 
@@ -72,11 +66,6 @@ public class UserServiceImpl implements UserService {
         List<User> users = userPage.getContent();
 
         for (User user : users){
-            User.builder()
-                    .userId(user.getUserId())
-                    .username(user.getUsername())
-                    .email(user.getEmail())
-                    .build();
             UserResponseDto userResponseDto = Mapper.toUserDto(user);
             returnValue.add(userResponseDto);
 
@@ -87,8 +76,8 @@ public class UserServiceImpl implements UserService {
 
     //Use Setters instead of builders for updating records
     @Override
-    public UserResponseDto updateUser(String id, UpdateUserRequestDto updateRequestDto) {
-        User user = userRepository.findByUserId(id).
+    public UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto) {
+        User user = userRepository.findByUserId(userId).
                 orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setEmail(updateRequestDto.getEmail());
         user.setUsername(updateRequestDto.getUsername());
@@ -99,10 +88,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override
-    public void deleteUser(String id) {
-        User user = userRepository.findByUserId(id)
+    public void deleteUser(String userId) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
         userRepository.delete(user);
     }

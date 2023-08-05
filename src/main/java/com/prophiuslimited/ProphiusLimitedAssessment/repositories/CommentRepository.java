@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Page<Comment> findAllByPostId(Long postId, Pageable pageable);
-    List<Comment> findAllByPostId(Long postId);
+    Page<Comment> findByUserId(String userId, Pageable pageable);
+    Page<Comment> findAllByUserIdAndPostId(String id, Long postId, Pageable pageable);
+    Optional<Comment> findByPostIdAndId( Long postId, Long commentId);
 }

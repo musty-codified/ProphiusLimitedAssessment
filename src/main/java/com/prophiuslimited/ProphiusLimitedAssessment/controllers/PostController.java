@@ -22,33 +22,35 @@ public class PostController {
     private final PostService postService;
 
 
-    @PostMapping("/{id}/posts")
-    public ResponseEntity<ApiResponse<Object>> createPost( @PathVariable String id,
+    @PostMapping("/{userId}/posts")
+    public ResponseEntity<ApiResponse<Object>> createPost( @PathVariable String userId,
                                                            @RequestBody @Valid PostRequestDto postRequest) {
-        PostResponseDto postResponseDto = postService.createPost(id, postRequest);
+        PostResponseDto postResponseDto = postService.createPost(userId, postRequest);
 
         return responseManager.success(postResponseDto);
     }
 
-    @GetMapping("/{id}/posts/{postId}")
-    public ResponseEntity<ApiResponse<Object>> getPost(@PathVariable String id, @PathVariable Long postId) {
-        PostResponseDto postResponseDto = postService.getPost(id, postId);
+    @GetMapping("/{userId}/posts/{postId}")
+    public ResponseEntity<ApiResponse<Object>> getPost(@PathVariable String userId, @PathVariable Long postId) {
+        PostResponseDto postResponseDto = postService.getPost(userId, postId);
         return responseManager.success(postResponseDto);
 
     }
 
-    @GetMapping("/{id}/posts")
-    public ResponseEntity<ApiResponse<Object>> getPosts(@PathVariable String id, @RequestParam(value = "page", defaultValue = "0") int page,
-                                                        @RequestParam(value = "limit", defaultValue = "5") int limit) {
-        List<PostResponseDto> postResponseDtos = postService.getPosts(id, page, limit);
+    @GetMapping("/{userId}/posts")
+    public ResponseEntity<ApiResponse<Object>> getPosts(@PathVariable String userId, @RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "limit", defaultValue = "5") int limit,
+                                                        @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+                                                        @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        List<PostResponseDto> postResponseDtos = postService.getPosts(userId, page, limit, sortBy, sortDir);
         return responseManager.success(postResponseDtos);
 
     }
 
-    @PutMapping("/{id}/posts/{postId}")
-    public ResponseEntity<ApiResponse<Object>> updatePost(@PathVariable String id, @PathVariable Long postId,
+    @PutMapping("/{userId}/posts/{postId}")
+    public ResponseEntity<ApiResponse<Object>> updatePost(@PathVariable String userId, @PathVariable Long postId,
                                                           @RequestBody @Valid PostRequestDto postRequest) {
-        PostResponseDto postResponseDto = postService.updatePost(id, postId, postRequest);
+        PostResponseDto postResponseDto = postService.updatePost(userId, postId, postRequest);
         return responseManager.success(postResponseDto);
 
     }

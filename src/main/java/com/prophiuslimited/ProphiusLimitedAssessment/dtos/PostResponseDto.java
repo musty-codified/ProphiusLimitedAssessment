@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +17,7 @@ public class PostResponseDto {
 
     private String userId;
     private String content;
-    private int likesCount;
     private String username;
-//    private List<PostLikeResponse> postLikeResponses;
-//    private List<CommentResponse> commentResponses;
+    private List<PostLikeResponseDto> postLikeResponses = new ArrayList<>();
+    private List<CommentResponseDto> commentResponses = new ArrayList<>();
 }

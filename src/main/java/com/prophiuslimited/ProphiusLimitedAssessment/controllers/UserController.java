@@ -28,9 +28,9 @@ public class UserController {
         return responseManager.success(userResponseDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Object>> getUser(@PathVariable String id) {
-        UserResponseDto userResponseDto = userService.getUser(id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<Object>> getUser(@PathVariable String userId) {
+        UserResponseDto userResponseDto = userService.getUser(userId);
         return responseManager.success(userResponseDto);
 
     }
@@ -46,17 +46,17 @@ public class UserController {
         return responseManager.success(userResponseDtos);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Object>> updateUser(@PathVariable String id,
+    @PutMapping("/{userId}")
+    public ResponseEntity<ApiResponse<Object>> updateUser(@PathVariable String userId,
                                                           @RequestBody @Valid UpdateUserRequestDto request) {
-        UserResponseDto userResponseDto = userService.updateUser(id, request);
+        UserResponseDto userResponseDto = userService.updateUser(userId, request);
         return responseManager.success(userResponseDto);
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity <HttpStatus> deleteUser(@PathVariable String id){
-        userService.deleteUser(id);
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity <HttpStatus> deleteUser(@PathVariable String userId){
+        userService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

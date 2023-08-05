@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,7 +30,9 @@ public class Post extends BaseEntity{
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<PostLike> postLikes = new HashSet<>();
 
 }

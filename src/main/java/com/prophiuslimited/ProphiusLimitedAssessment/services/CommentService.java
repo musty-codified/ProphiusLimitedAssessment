@@ -7,13 +7,13 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostRequestDto;
 import java.util.List;
 
 public interface CommentService {
-    CommentResponseDto createComment(String id, Long postId, CommentRequestDto commentRequest);
+    CommentResponseDto createComment(String userId, Long postId, CommentRequestDto commentRequest);
 
-    CommentResponseDto getComment(String id, Long postId, Long commentId);
+    CommentResponseDto getComment(String userId, Long postId, Long commentId);
 
-    List<CommentResponseDto> getComments(String id, int cPage, int cLimit);
+    List<CommentResponseDto> getComments(String userId, Long postId,  int cPage, int cLimit, String sortBy, String sortDir);
 
-    CommentResponseDto updateComment(String id, Long postId, Long commentId, CommentRequestDto commentRequest);
+    CommentResponseDto updateComment(String userId, Long postId, Long commentId, CommentRequestDto commentRequest);
 
-    void deleteComment(String id, Long postId, Long commentId);
+    void deleteComment(String userId, Long postId, Long commentId);
 }

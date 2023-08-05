@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PostService {
 
-    PostResponseDto createPost(String id, PostRequestDto postRequest);
+    PostResponseDto createPost(String userId, PostRequestDto postRequest);
 
-    PostResponseDto getPost(String id, Long postId);
+    PostResponseDto getPost(String userId, Long postId);
 
-    List<PostResponseDto> getPosts (String id, int page, int limit);
+    List<PostResponseDto> getPosts (String userId, int page, int limit, String sortBy, String sortDir);
 
-    PostResponseDto updatePost (String id, Long postId, PostRequestDto postRequest);
+    PostResponseDto updatePost (String userId, Long postId, PostRequestDto postRequest);
 
-    void deletePost( String id, Long postId);
+    void deletePost( String userId, Long postId);
 }

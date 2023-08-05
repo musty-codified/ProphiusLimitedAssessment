@@ -4,6 +4,7 @@ package com.prophiuslimited.ProphiusLimitedAssessment.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "comment_tbl")
@@ -19,9 +20,14 @@ public class Comment extends BaseEntity{
 
     private String userId;
     private String username;
+
+    private int likesCount;
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id", nullable = false)
     private Post post;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    private Set<CommentLike> commentLikes;
 
 
 }
