@@ -36,4 +36,10 @@ public class User extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> posts ;
 
+    @ManyToMany
+    private Set<User> followers;
+
+    @ManyToMany
+    private Set<User> following;
+
 }
