@@ -1,8 +1,8 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.SignupRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UpdateUserRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UserResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.UpdateUserRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 
 import java.util.List;
 

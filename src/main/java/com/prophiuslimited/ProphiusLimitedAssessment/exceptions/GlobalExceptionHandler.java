@@ -1,7 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.exceptions;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.ErrorResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,8 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.controllers.PostController;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.PostLike;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;

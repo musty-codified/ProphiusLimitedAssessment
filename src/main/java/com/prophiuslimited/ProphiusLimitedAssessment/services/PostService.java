@@ -1,7 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
 
 import java.util.List;
 

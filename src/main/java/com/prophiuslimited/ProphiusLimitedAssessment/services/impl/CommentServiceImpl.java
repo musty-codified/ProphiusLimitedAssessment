@@ -1,7 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.CommentRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.CommentResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.CommentRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.*;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ResourceNotFoundException;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UnauthorizedUserException;

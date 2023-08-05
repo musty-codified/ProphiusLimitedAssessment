@@ -1,6 +1,6 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.PostLikeResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostLikeResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.PostLike;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ResourceNotFoundException;

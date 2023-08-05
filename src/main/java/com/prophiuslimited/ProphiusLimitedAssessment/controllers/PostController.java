@@ -2,6 +2,8 @@ package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
