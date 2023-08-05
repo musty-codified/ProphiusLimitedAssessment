@@ -16,13 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class CommentController {
+
     private final ResponseManager responseManager;
     private final CommentService commentService;
+
 
     @PostMapping("/{userId}/posts/{postId}/comments")
     public ResponseEntity<ApiResponse<Object>> createComment(@PathVariable String userId, @PathVariable Long postId,
                                                              @RequestBody @Valid CommentRequestDto commentRequest) {
         CommentResponseDto commentResponseDto = commentService.createComment(userId, postId, commentRequest);
+
         return responseManager.success(commentResponseDto);
     }
 

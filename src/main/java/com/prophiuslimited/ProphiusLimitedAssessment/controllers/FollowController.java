@@ -1,10 +1,15 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
+
+
+import com.prophiuslimited.ProphiusLimitedAssessment.repositories.UserRepository;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.FollowService;
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +21,7 @@ public class FollowController {
     @PostMapping("/{followerId}/follow/{followeeId}")
     public ResponseEntity<?> followUser(@PathVariable String followerId, @PathVariable String followeeId) {
         followService.followUser(followerId, followeeId);
-        return new ResponseEntity<>(HttpStatus.OK) ;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{followerId}/unfollow/{followeeId}")
@@ -24,5 +29,4 @@ public class FollowController {
         followService.unfollowUser(followerId, followeeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

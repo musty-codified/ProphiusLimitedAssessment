@@ -1,5 +1,6 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.utils;
 
+
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.*;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class Mapper {
             post.setComments(new HashSet<>());
 
         }
+
         return PostResponseDto.builder()
                 .content(post.getContent())
                 .username(post.getUser().getUsername())

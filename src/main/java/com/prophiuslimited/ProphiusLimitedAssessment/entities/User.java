@@ -38,7 +38,6 @@ public class User extends BaseEntity implements Serializable {
 
     @ManyToMany
     private Set<User> followers;
-
     @ManyToMany
     private Set<User> following;
 
