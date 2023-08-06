@@ -1,7 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.exceptions;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.ErrorResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherServiceException(Exception ex, WebRequest request) {
         ErrorResponse errorMessage = new ErrorResponse(new Date(), ex.getMessage());
-        errorMessage.setDebugMessage("error");
+        errorMessage.setDebugMessage("You have encountered an error");
 
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

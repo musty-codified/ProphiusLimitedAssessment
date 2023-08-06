@@ -1,6 +1,10 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.LoginRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.UpdateUserRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.LoginResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.RecordAlreadyExistException;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UserNotFoundException;

@@ -1,8 +1,10 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostService;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +25,8 @@ public class PostController {
 
 
     @PostMapping("/{userId}/posts")
-    public ResponseEntity<ApiResponse<Object>> createPost( @PathVariable String userId,
-                                                           @RequestBody @Valid PostRequestDto postRequest) {
+    public ResponseEntity<ApiResponse<Object>> createPost(@PathVariable String userId,
+                                                          @RequestBody @Valid PostRequestDto postRequest) {
         PostResponseDto postResponseDto = postService.createPost(userId, postRequest);
 
         return responseManager.success(postResponseDto);

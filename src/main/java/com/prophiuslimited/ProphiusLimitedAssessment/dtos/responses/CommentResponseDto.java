@@ -1,6 +1,7 @@
-package com.prophiuslimited.ProphiusLimitedAssessment.dtos;
+package com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses;
 
 
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentLikeResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

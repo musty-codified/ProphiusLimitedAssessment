@@ -1,4 +1,4 @@
-package com.prophiuslimited.ProphiusLimitedAssessment.dtos;
+package com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

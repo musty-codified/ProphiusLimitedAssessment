@@ -1,10 +1,10 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.ApiResponse;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.SignupRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UpdateUserRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UserResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.UpdateUserRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;

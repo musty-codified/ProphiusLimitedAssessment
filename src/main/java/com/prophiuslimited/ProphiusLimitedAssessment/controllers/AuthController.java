@@ -1,9 +1,9 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.ApiResponse;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.LoginRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.LoginResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.LoginRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.LoginResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;

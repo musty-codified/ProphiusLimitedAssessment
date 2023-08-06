@@ -1,8 +1,9 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentLikeResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.CommentLikeService;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

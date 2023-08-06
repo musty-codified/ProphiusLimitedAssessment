@@ -1,9 +1,8 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.CommentLikeResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentLikeResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.Comment;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.CommentLike;
-import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ResourceNotFoundException;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UserNotFoundException;
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.CommentLikeRepository;

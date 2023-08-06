@@ -1,4 +1,4 @@
-package com.prophiuslimited.ProphiusLimitedAssessment.dtos;
+package com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses;
 
 
 import lombok.AllArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponseDto {
-
-    private String userId;
+public class LoginResponseDto {
+    private String username;
     private String email;
-    private String userName;
+    private String token;
+
 }

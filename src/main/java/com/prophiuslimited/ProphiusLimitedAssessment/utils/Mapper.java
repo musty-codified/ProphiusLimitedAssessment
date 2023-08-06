@@ -1,6 +1,6 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.utils;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.*;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
