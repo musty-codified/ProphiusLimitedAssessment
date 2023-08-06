@@ -24,7 +24,7 @@ public class SignupRequestDto implements Serializable {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, max=25, message="Password must be equal to or greater than 8 character and less than 25 characters")
+//    @Size(min = 8, max=25, message="Password must be equal to or greater than 8 character and less than 30 characters")
     private String password;
 
 }

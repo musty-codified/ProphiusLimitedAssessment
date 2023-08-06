@@ -1,8 +1,6 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.services;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.SignupRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UpdateUserRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.UserResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.*;
 
 import java.util.List;
 
@@ -15,4 +13,5 @@ public interface UserService {
     UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto);
     void deleteUser(String userId);
 
+    LoginResponseDto login(LoginRequestDto request);
 }
