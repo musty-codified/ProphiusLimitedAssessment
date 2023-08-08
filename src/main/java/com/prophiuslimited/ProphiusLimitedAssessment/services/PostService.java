@@ -2,8 +2,9 @@ package com.prophiuslimited.ProphiusLimitedAssessment.services;
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+
 
 public interface PostService {
 
@@ -11,7 +12,7 @@ public interface PostService {
 
     PostResponseDto getPost(String userId, Long postId);
 
-    List<PostResponseDto> getPosts (String userId, int page, int limit, String sortBy, String sortDir);
+    Page<PostResponseDto> getPosts (String userId, int page, int limit, String sortBy, String sortDir);
 
     PostResponseDto updatePost (String userId, Long postId, PostRequestDto postRequest);
 

@@ -78,10 +78,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponseDto> getComments(String userId, Long postId, int cPage, int cLimit, String sortBy, String sortDir) {
-
-        List <CommentResponseDto> returnValue = new ArrayList<>();
-
+    public Page<CommentResponseDto> getComments(String userId, Long postId, int cPage, int cLimit, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
        userRepository.findByUserId(userId)
@@ -89,20 +86,10 @@ public class CommentServiceImpl implements CommentService {
 
         postRepository.findById(postId)
                 .orElseThrow(()-> new UserNotFoundException("Post not found"));
+             if(cPage>0) cPage = cPage-1;
 
-        if(cPage>0) cPage = cPage-1;
-
-        Pageable pageableRequest = PageRequest.of(cPage, cLimit, sort);
-        Page<Comment> commentPage = commentRepository.findAllByUserIdAndPostId(userId, postId, pageableRequest);
-
-        List<Comment> comments = commentPage.getContent();
-
-        for (Comment comment : comments){
-            CommentResponseDto commentResponseDto = Mapper.toCommentDto(comment);
-            returnValue.add(commentResponseDto);
-
-        }
-        return returnValue;
+        return commentRepository.findAllByUserIdAndPostId(userId, postId, PageRequest.of(cPage, cLimit, sort))
+                .map(Mapper::toCommentDto);
 
     }
 

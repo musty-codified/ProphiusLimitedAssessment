@@ -11,10 +11,8 @@ public class ProphiusLimitedAssessmentApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProphiusLimitedAssessmentApplication.class, args);
 	}
-//     @Bean
-//	public Faker faker(){
-//		return new Faker();
-//	 }
-
-
+     @Bean
+	public Faker faker(){
+		return new Faker();
+	 }
 }

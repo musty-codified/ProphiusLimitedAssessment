@@ -15,10 +15,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.AppUtils;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.Mapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,9 +25,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
         boolean emailExist = userRepository.existsByEmail(signupRequest.getEmail());
 
         if (emailExist)
-            throw new RecordAlreadyExistException("Record already exist in database");
+            throw new RecordAlreadyExistException("Record already exist");
         User user = User.builder()
                 .userId(appUtil.generateUserId(10))
                 .email(signupRequest.getEmail())
@@ -65,29 +62,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUser(String userId) {
       User user =  userRepository.findByUserId(userId)
-                .orElseThrow(()-> new UserNotFoundException("User with ID " + userId + " not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found with ID " + userId));
         return Mapper.toUserDto(user);
     }
 
     @Override
-    public List<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
-        List<UserResponseDto> returnValue = new ArrayList<>();
-
+    public Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
+        List<User> userPage = userRepository.findAll();
+        List<UserResponseDto> userResponseDtos = userPage.stream()
+                .map(Mapper::toUserDto).collect(Collectors.toList());
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
-
-        if(page>0) page = page-1;
         Pageable pageableRequest = PageRequest.of(page, limit, sort);
-        Page<User> userPage = userRepository.findAll(pageableRequest);
-        List<User> users = userPage.getContent();
+        int max = Math.min(limit * (page + 1), userResponseDtos.size());
+        int min = page * limit;
+        return new PageImpl<>(userResponseDtos.subList(min, max), pageableRequest, userResponseDtos.size());
 
-        for (User user : users){
-            UserResponseDto userResponseDto = Mapper.toUserDto(user);
-            returnValue.add(userResponseDto);
-
-        }
-
-        return returnValue;
     }
 
     @Override

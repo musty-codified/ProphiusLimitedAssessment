@@ -3,6 +3,7 @@ package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.PostLike;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
@@ -17,16 +18,14 @@ import com.prophiuslimited.ProphiusLimitedAssessment.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,6 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto createPost(String userId, PostRequestDto postRequest) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User is not found"));
-
         // Step 1: Create and associate PostLike entities
         Set<PostLike> postLikes = new HashSet<>();
 
@@ -70,7 +68,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDto getPost(String userId, Long postId) {
         userRepository.findByUserId(userId)
-                .orElseThrow(()-> new UserNotFoundException("User with ID " + userId + " not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found with ID " + userId ));
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post resource not found"));
 
@@ -78,27 +76,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto> getPosts(String userId, int page, int limit, String sortBy, String sortDir) {
+    public Page<PostResponseDto> getPosts(String userId, int page, int limit, String sortBy, String sortDir) {
 
-        List<PostResponseDto> returnValue = new ArrayList<>();
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
-
         userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
-
         if(page>0) page = page-1;
 
-        Pageable pageableRequest = PageRequest.of(page,limit, sort);
-        Page<Post> postPage = postRepository.findAll(pageableRequest);
-        List<Post> posts = postPage.getContent();
+        return postRepository.findAll(PageRequest.of(page, limit, sort))
+                .map(Mapper::toPostDto);
 
-        for (Post post : posts){
-            PostResponseDto postResponseDto = Mapper.toPostDto(post);
-            returnValue.add(postResponseDto);
-
-        }
-        return returnValue;
     }
 
     @Override

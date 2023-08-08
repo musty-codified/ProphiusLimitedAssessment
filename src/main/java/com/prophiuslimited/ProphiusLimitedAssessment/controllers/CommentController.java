@@ -7,6 +7,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.services.CommentService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class CommentController {
                                                            @RequestParam(value = "limit", defaultValue = "5") int cLimit,
                                                            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-        List<CommentResponseDto> commentResponseDtos = commentService.getComments(userId, postId, cPage, cLimit, sortBy, sortDir);
+        Page<CommentResponseDto> commentResponseDtos = commentService.getComments(userId, postId, cPage, cLimit, sortBy, sortDir);
         return responseManager.success(commentResponseDtos);
 
     }

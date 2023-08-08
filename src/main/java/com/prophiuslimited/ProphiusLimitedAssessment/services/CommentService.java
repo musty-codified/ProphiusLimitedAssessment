@@ -2,6 +2,7 @@ package com.prophiuslimited.ProphiusLimitedAssessment.services;
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.CommentRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentResponseDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface CommentService {
 
     CommentResponseDto getComment(String userId, Long postId, Long commentId);
 
-    List<CommentResponseDto> getComments(String userId, Long postId,  int cPage, int cLimit, String sortBy, String sortDir);
+    Page<CommentResponseDto> getComments(String userId, Long postId, int cPage, int cLimit, String sortBy, String sortDir);
 
     CommentResponseDto updateComment(String userId, Long postId, Long commentId, CommentRequestDto commentRequest);
 

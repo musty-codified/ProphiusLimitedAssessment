@@ -8,6 +8,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponse
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +41,8 @@ public class UserController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
-                                                        ) {
-        List<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        Page<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
         return responseManager.success(userResponseDtos);
     }
 

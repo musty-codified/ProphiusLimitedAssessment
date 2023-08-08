@@ -8,12 +8,12 @@ import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +44,7 @@ public class PostController {
                                                         @RequestParam(value = "limit", defaultValue = "5") int limit,
                                                         @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                         @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-        List<PostResponseDto> postResponseDtos = postService.getPosts(userId, page, limit, sortBy, sortDir);
+        Page<PostResponseDto> postResponseDtos = postService.getPosts(userId, page, limit, sortBy, sortDir);
         return responseManager.success(postResponseDtos);
 
     }
