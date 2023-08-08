@@ -36,9 +36,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponseDto createComment(String userId, Long postId, CommentRequestDto commentRequest) {
-        userRepository.findByUserId(userId).orElseThrow(()-> new UserNotFoundException("User not found"));
+        userRepository.findByUserId(userId).orElseThrow(()-> new UserNotFoundException("User not found with ID: " + userId));
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with ID: " + postId));
 
         Set<CommentLike> commentLikes = new HashSet<>();
 
@@ -51,8 +51,9 @@ public class CommentServiceImpl implements CommentService {
 
         CommentLike commentLike = new CommentLike();
         commentLike.setLiked(false); // Set the default liked status if needed
-        commentLike.setComment(comment);// Associate the CommentLike with the new Commentt
+        commentLike.setComment(comment);// Associate the CommentLike with the new Comment
         commentLike.setUserId(userId);
+        commentLike.setPostId(postId);
         commentLikes.add(commentLike);
 
         comment.setCommentLikes(commentLikes);

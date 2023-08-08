@@ -81,7 +81,8 @@ public class PostServiceImpl implements PostService {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
         userRepository.findByUserId(userId)
-                .orElseThrow(()-> new UserNotFoundException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found with ID: " + userId));
+
         if(page>0) page = page-1;
 
         return postRepository.findAll(PageRequest.of(page, limit, sort))

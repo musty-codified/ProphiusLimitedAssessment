@@ -19,7 +19,6 @@ public class CommentLike extends BaseEntity{
 
     private boolean liked;
     private int likeCount;
-
     private Long postId;
     private String userId;
     @ManyToOne

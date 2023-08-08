@@ -3,6 +3,7 @@ package com.prophiuslimited.ProphiusLimitedAssessment.services.impl;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostLikeResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.Post;
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.PostLike;
+import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ResourceNotFoundException;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UserNotFoundException;
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.PostLikeRepository;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -29,11 +32,11 @@ public class PostLikeServiceImpl implements PostLikeService {
     public PostLikeResponseDto updatePostLike(String userId, Long postId) {
 
         userRepository.findByUserId(userId)
-                .orElseThrow(()-> new UserNotFoundException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found with ID: " + userId));
         Post post = postRepository.findById(postId)
-                .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found with ID: " + postId));
 
-        PostLike postLike = postLikeRepository.findAllByUserIdAndId(userId, postId);
+        PostLike postLike = postLikeRepository.findAllByUserIdAndPostId(userId, postId);
         logger.info("postLike " + postLike);
 
         if (postLike == null) {
@@ -44,22 +47,66 @@ public class PostLikeServiceImpl implements PostLikeService {
             postLike.setPost(post);
             postLikeRepository.save(postLike);
 
-            //Increment the likesCount of the Post entity
+            //Increment the likesCount of the Associated Post entity
             post.setLikesCount(post.getLikesCount() + 1);
-            postLike.getPost().setLikesCount(post.getLikesCount() + 1);
         } else {
             // If the postLike exists, toggle its liked status
             boolean liked = postLike.isLiked();
             postLike.setLiked(!liked);
             postLikeRepository.save(postLike);
 
-            int likesCount = post.getLikesCount();
-            post.setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+            if (liked){
+                post.setLikesCount(post.getLikesCount() - 1);
+            } else {
+                post.setLikesCount(post.getLikesCount() + 1);
+            }
         }
+        postRepository.save(post);
 
-        PostLike updatedPostLike = postLikeRepository.save(postLike);
+        return Mapper.toPostLikeDto(postLike);
 
-        return Mapper.toPostLikeDto(updatedPostLike);
     }
+
+//        User user = userRepository.findByUserId(userId)
+//                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+//
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Post not found with ID: " + postId));
+//
+//        // Check if the user has already liked the post
+//        Optional<PostLike> existingPostLike = post.getPostLikes().stream()
+//                .filter(like -> like.getUserId().equals(userId))
+//                .findFirst();
+//
+//        if (existingPostLike.isPresent()) {
+//            // User has already liked the post, so toggle the like status
+//            PostLike postLike = existingPostLike.get();
+//            boolean liked = postLike.isLiked();
+//            postLike.setLiked(!liked);
+//            postLikeRepository.save(postLike);
+//
+//            // Update the likesCount of the Post entity
+//            if (liked) {
+//                post.setLikesCount(post.getLikesCount() - 1);
+//            } else {
+//                post.setLikesCount(post.getLikesCount() + 1);
+//            }
+//        } else {
+//            // User hasn't liked the post yet, so create a new PostLike
+//            PostLike newPostLike = new PostLike();
+//            newPostLike.setLiked(true);
+//            newPostLike.setUserId(userId);
+//            newPostLike.setPost(post);
+//            postLikeRepository.save(newPostLike);
+//
+//            // Increment the likesCount of the Post entity
+//            post.setLikesCount(post.getLikesCount() + 1);
+//        }
+//
+//        // Save the updated Post entity
+//        postRepository.save(post);
+//
+//        return Mapper.toPostLikeDto(updatedPostLike);
+//    }
 }
 

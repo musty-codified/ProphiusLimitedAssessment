@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
-
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
         Pageable pageableRequest = PageRequest.of(page, limit, sort);
