@@ -14,5 +14,5 @@ public class UserResponseDto {
 
     private String userId;
     private String email;
-    private String userName;
+    private String username;
 }

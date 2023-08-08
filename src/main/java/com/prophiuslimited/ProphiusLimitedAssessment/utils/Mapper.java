@@ -19,7 +19,7 @@ public class Mapper {
     public static UserResponseDto toUserDto(User user) {
         return UserResponseDto.builder()
                 .userId(user.getUserId())
-                .userName(user.getUsername())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .build();
     }

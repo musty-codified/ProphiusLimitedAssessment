@@ -68,12 +68,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
-        List<User> userPage = userRepository.findAll();
-        List<UserResponseDto> userResponseDtos = userPage.stream()
-                .map(Mapper::toUserDto).collect(Collectors.toList());
+
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
         Pageable pageableRequest = PageRequest.of(page, limit, sort);
+        Page<User> userPage = userRepository.findAll(pageableRequest);
+        List<UserResponseDto> userResponseDtos = userPage.stream()
+                .map(Mapper::toUserDto).collect(Collectors.toList());
+        if (page > 0) page = page -1;
         int max = Math.min(limit * (page + 1), userResponseDtos.size());
         int min = page * limit;
         return new PageImpl<>(userResponseDtos.subList(min, max), pageableRequest, userResponseDtos.size());
