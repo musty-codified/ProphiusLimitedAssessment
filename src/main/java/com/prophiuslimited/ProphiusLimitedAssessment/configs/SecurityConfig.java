@@ -30,10 +30,12 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     private final JwtAuthFilter jwtAuthFilter;
-    private static final String [] WHITE_LISTED_URLS = {"/api/v1/users/signup", "/api/v1/user/login",
-            "/v3/api-docs/**",  "/configuration/**",   "/swagger*/**",
-            "/swagger-ui/**",  "/webjars/**"};
-
+    private static final String [] WHITE_LISTED_URLS = {
+            "/api/v1/users/signup", "/api/v1/user/login",
+            "/v3/api-docs/**",  "/configuration/**",
+            "/swagger*/**", "/swagger-ui/**",
+            "/webjars/**", "/actuator/health"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -51,7 +53,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -74,7 +75,6 @@ public class SecurityConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)

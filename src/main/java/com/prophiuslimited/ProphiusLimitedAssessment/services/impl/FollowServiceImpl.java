@@ -14,20 +14,21 @@ public class FollowServiceImpl implements FollowService {
     private final UserRepository userRepository;
     @Override
     public void followUser(String followerId, String followeeId) {
-      User follower = userRepository.findByUserId(followerId)
-                .orElseThrow(()-> new UserNotFoundException("User not found with Id: " + followerId));
-      User followee = userRepository.findByUserId(followeeId)
-                .orElseThrow(()-> new UserNotFoundException("User not found with Id: " + followeeId));
+        User follower = follows(followeeId);
+       User followee = follows(followeeId);
       follower.getFollowing().add(followee);
       userRepository.save(follower);
     }
 
+    private User follows(String userId){
+        return userRepository.findByUserId(userId)
+                .orElseThrow(()-> new UserNotFoundException("User not found with Id: " + userId));
+    }
+
     @Override
     public void unfollowUser(String followerId, String followeeId) {
-        User follower = userRepository.findByUserId(followerId)
-                .orElseThrow(()-> new UserNotFoundException("User not found with Id: " + followerId));
-        User followee = userRepository.findByUserId(followeeId)
-                .orElseThrow(()-> new UserNotFoundException("User not found with Id: " + followeeId));
+        User follower = follows(followeeId);
+        User followee = follows(followeeId);
         follower.getFollowing().remove(followee);
         userRepository.save(follower);
     }

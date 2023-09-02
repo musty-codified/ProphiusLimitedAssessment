@@ -1,9 +1,14 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.security;
 
+import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
+import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UserNotFoundException;
+import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
+import com.prophiuslimited.ProphiusLimitedAssessment.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,19 +20,27 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtils {
 
     @Value("${app.jwt_secret}")
      private String JWT_SECRET;
+
+    private final UserRepository userRepository;
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
     }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
     public boolean hasClaim(String token, String claimName){
         final Claims claims = extractAllClaims(token);
         return claims.get(claimName) != null;
+    }
+    public Object getClaim(String token, String claimName){
+        final Claims claims = extractAllClaims(token);
+        return claims.get(claimName) ;
     }
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -36,7 +49,11 @@ public class JwtUtils {
     private Claims extractAllClaims(String token) {
         Claims claims;
         try {
-            claims =  Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
+            claims = Jwts
+                    .parser()
+                    .setSigningKey(JWT_SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (JwtException e) {
             throw new JwtException(e.getMessage());
         }
@@ -47,8 +64,11 @@ public class JwtUtils {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String userId) {
         Map<String, Object> claims = new HashMap<>();
+//      User user = userRepository.findByEmail(email)
+//              .orElseThrow(()-> new ValidationException("Error generating token "));
+        claims.put("userId", userId);
         return createToken(claims, email);
     }
     private String createToken(Map<String, Object> claims, String email) {
@@ -64,4 +84,5 @@ public class JwtUtils {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
 }

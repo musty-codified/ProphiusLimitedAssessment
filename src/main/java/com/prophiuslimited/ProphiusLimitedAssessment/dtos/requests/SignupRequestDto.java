@@ -1,5 +1,6 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiResponse
 public class SignupRequestDto implements Serializable {
 
     @NotBlank(message = "Username is mandatory")
@@ -24,7 +26,7 @@ public class SignupRequestDto implements Serializable {
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-//    @Size(min = 8, max=25, message="Password must be equal to or greater than 8 character and less than 30 characters")
+    @Size(min = 8, max=25, message="Password must be equal to or greater than 8 character and less than 30 characters")
     private String password;
 
 }

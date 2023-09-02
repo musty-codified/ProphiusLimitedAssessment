@@ -7,6 +7,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.UpdateUserReq
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +23,8 @@ public class UserController {
     private final ResponseManager responseManager;
     private final UserService userService;
 
+    @Operation(summary = "Create a new user account",
+            description = "After creating your account, Proceed to login. \n")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Object>> createUser(@RequestBody @Valid SignupRequestDto signupRequest) {
         UserResponseDto userResponseDto = userService.signUp(signupRequest);
@@ -33,7 +35,6 @@ public class UserController {
     public ResponseEntity<ApiResponse<Object>> getUser(@PathVariable String userId) {
         UserResponseDto userResponseDto = userService.getUser(userId);
         return responseManager.success(userResponseDto);
-
     }
 
     @GetMapping()
@@ -41,11 +42,11 @@ public class UserController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
+            String username, String email) {
         Page<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
         return responseManager.success(userResponseDtos);
     }
-
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse<Object>> updateUser(@PathVariable String userId,
                                                           @RequestBody @Valid UpdateUserRequestDto request) {
@@ -53,7 +54,6 @@ public class UserController {
         return responseManager.success(userResponseDto);
 
     }
-
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity <HttpStatus> deleteUser(@PathVariable String userId){
         userService.deleteUser(userId);

@@ -7,16 +7,13 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.LoginRespons
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 public interface UserService {
     UserResponseDto signUp(SignupRequestDto signupRequest);
     UserResponseDto getUser(String userId);
-
+    UserResponseDto getUserByEmail(String userId);
     Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir);
-
     UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto);
     void deleteUser(String userId);
-
     LoginResponseDto login(LoginRequestDto request);
 }

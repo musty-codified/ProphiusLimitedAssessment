@@ -1,6 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,6 +28,7 @@ public class Post extends BaseEntity{
     private int likesCount;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

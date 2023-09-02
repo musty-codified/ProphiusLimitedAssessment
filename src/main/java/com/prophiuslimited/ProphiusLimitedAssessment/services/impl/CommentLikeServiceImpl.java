@@ -25,19 +25,18 @@ public class CommentLikeServiceImpl implements CommentLikeService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
-
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Override
     public CommentLikeResponseDto updateCommentLike(String userId, Long postId, Long commentId) {
 
         userRepository.findByUserId(userId)
-                .orElseThrow(()-> new UserNotFoundException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found with ID " + userId));
          postRepository.findById(postId)
-                .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found with ID " + postId));
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Comment not found with ID " + commentId));
 
 //        CommentLike commentLike = commentLikeRepository.findAllByCommentIdAndPostIdAndUserId(commentId, postId, userId);
         CommentLike commentLike = commentLikeRepository.findByCommentIdAndUserId(commentId, userId);
@@ -48,27 +47,30 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             commentLike = new CommentLike();
             commentLike.setLiked(true);
             commentLike.setUserId(userId);
+            commentLike.setPostId(postId);
             commentLike.setComment(comment);
+            commentLike.getComment().setLikesCount(comment.getLikesCount() + 1);
+
             commentLikeRepository.save(commentLike);
 
 
-            //Increment the likesCount of the Comment entity
+            //Increment the likesCount of the Associated Comment entity
             comment.setLikesCount(comment.getLikesCount() + 1);
-            commentLike.getComment().setLikesCount(comment.getLikesCount() + 1);
         } else {
             // If the commentLike exists, toggle its liked status
             boolean liked = commentLike.isLiked();
             commentLike.setLiked(!liked);
             commentLikeRepository.save(commentLike);
 
-            // Update the like count based on the liked status
-            int likesCount = comment.getLikesCount();
-            comment.setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+            if (liked){
+                comment.setLikesCount(comment.getLikesCount() - 1);
+            } else {
+                comment.setLikesCount(comment.getLikesCount() + 1);
+            }
 
         }
 
-        // Update the like count of the comment entity as well
-       CommentLike updatedCommentLike = commentLikeRepository.save(commentLike);
+        commentRepository.save(comment);
 
         return Mapper.toCommentLikeDto(commentLike);
     }

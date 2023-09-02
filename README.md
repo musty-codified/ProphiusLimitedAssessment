@@ -11,9 +11,10 @@ The backend api for a social media application
 - The _Following_ entity keep the information about all the users whom a user followers
 
 ## Technology ##
-Following libraries were used during the development of API :
+Following tools and libraries were used during the development of API :
 - **Java 17** - Java version
 - **Spring Boot** - Server side framework
+- **Build Tool: Maven**
 - **MySQL** - Database
 - **Swagger** - API documentation [here](http://localhost:8081/swagger-ui/index.html#/)
 - **JWT** - Authentication mechanism for REST APIs
@@ -82,9 +83,9 @@ And when there is an exception, the following responses are sent back (result of
 ```
 
 ## Running the server locally ##
-To run this Spring Boot app you need to first build it. To build and package the Spring Boot app into a single executable Jar file with a Maven, 
+To run this Spring Boot app you need to first build it. To build and package the Spring Boot app into a single executable Jar file with Maven, 
 You will need to run it from the project folder which contains the pom.xml file.
-Use the following commands:
+Using the following commands:
 
 ```
 maven clean compile
@@ -117,7 +118,7 @@ following url - [here](http://localhost:8081/swagger-ui/index.html#/)
 During development, I faced challenges related to handling exceptions, validating user input, and managing database transactions. 
 I encountered issues with data inconsistency, especially when dealing with complex relationships between entities. 
 Additionally, implementing searching, and filtering functionalities presented some challenges.
-Documentation and testing was challenging, as writing clear and comprehensive documentation and creating effective was time-consuming.
+Documentation and testing was challenging, as writing clear and comprehensive documentation and creating effective testing was time-consuming.
 
 
 

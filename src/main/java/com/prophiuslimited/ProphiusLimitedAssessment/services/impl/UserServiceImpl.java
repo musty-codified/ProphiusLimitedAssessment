@@ -15,6 +15,8 @@ import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.AppUtils;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.Mapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,16 +39,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailService customUserDetailService;
-
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final JwtUtils jwtUtil;
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
-        boolean emailExist = userRepository.existsByEmail(signupRequest.getEmail());
-
-        if (emailExist)
+        if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
-        User user = User.builder()
+            User user = User.builder()
                 .userId(appUtil.generateUserId(10))
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
@@ -67,11 +67,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("User not found with email " + email));
+        return Mapper.toUserDto(user);
+    }
+
+    @Override
     public Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
+
         Pageable pageableRequest = PageRequest.of(page, limit, sort);
         Page<User> userPage = userRepository.findAll(pageableRequest);
+
         List<UserResponseDto> userResponseDtos = userPage.stream()
                 .map(Mapper::toUserDto).collect(Collectors.toList());
         if (page > 0) page = page -1;
@@ -105,6 +114,7 @@ public class UserServiceImpl implements UserService {
     public LoginResponseDto login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()
                 -> new BadCredentialsException("Bad credentials"));
+        logger.info("Email is: " + request.getEmail());
 
         Authentication authentication;
         try {
@@ -117,7 +127,8 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = customUserDetailService.loadUserByUsername(request.getEmail());
-        String token = jwtUtil.generateToken(userDetails.getUsername());
+
+        String token = jwtUtil.generateToken(userDetails.getUsername(), user.getUserId());
 
          LoginResponseDto responseDto = LoginResponseDto.builder()
                  .username(user.getUsername())

@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,9 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
-
     private final PostRepository postRepository;
-
     private final UserRepository userRepository;
 
     private final PostLikeRepository postLikeRepository;
@@ -40,6 +41,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponseDto createPost(String userId, PostRequestDto postRequest) {
+
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User is not found"));
         // Step 1: Create and associate PostLike entities
@@ -50,13 +52,11 @@ public class PostServiceImpl implements PostService {
                 .user(user)
                 .likesCount(0)
                 .build();
-
             PostLike postLike = new PostLike();
             postLike.setLiked(false); // Set the default liked status if needed
-            postLike.setPost(post);// Associate the PostLike with the new Post
+            postLike.setPost(post);   // Associate the PostLike with the new Post
             postLike.setUserId(userId);
             postLikes.add(postLike);
-
 
         logger.info("Post likes: " + postLikes);
 
@@ -111,10 +111,10 @@ public class PostServiceImpl implements PostService {
     public void deletePost(String userId, Long postId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
-      Post post = postRepository.findById(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post resource not found"));
-      logger.info("User " + user);
-      logger.info("Post " + post);
+             logger.info("User " + user);
+             logger.info("Post " + post);
                 if (post.getUser().equals(user))
                     postRepository.delete(post);
 
