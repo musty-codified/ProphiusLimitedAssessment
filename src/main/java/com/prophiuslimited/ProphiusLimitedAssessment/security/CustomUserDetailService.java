@@ -28,13 +28,4 @@ public class CustomUserDetailService implements UserDetailsService {
                 user.getEmail(), password, Arrays.asList());
     }
 
-    @Transactional
-    public UserDetails loadUserById(String userId){
-        User user = userRepository.findByUserId(userId).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id : " + userId)
-        );
-
-        return new org.springframework.security.core.userdetails.User(user.getUserId(),
-                user.getPassword(), new ArrayList<>());
-    }
 }

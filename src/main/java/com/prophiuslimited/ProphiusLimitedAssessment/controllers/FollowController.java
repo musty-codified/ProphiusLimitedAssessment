@@ -18,24 +18,25 @@ import javax.servlet.http.HttpServletRequest;
 public class FollowController {
 
     private final FollowService followService;
+
     @Operation(summary = "Endpoint to follow a user. ",
     description = "Add a specific user to followers list"
     )
 
     @PostMapping("/{followerId}/follow/{followeeId}")
-    public ResponseEntity<?> followUser(@PathVariable String followerId, @PathVariable String followeeId) {
-
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(followerId)) {
-            throw new ValidationException("Invalid userId.");
-        }
+    public ResponseEntity<HttpStatus> followUser(@PathVariable String followerId, @PathVariable String followeeId) {
+//
+//        // Get the current HTTP request
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+//                .currentRequestAttributes()).getRequest();
+//
+////        // Get the authenticated userId from the request attribute
+////        String authenticatedUserId = (String) request.getAttribute("userId");
+////
+////        // Compare the authenticated userId with the userId from the path variable
+////        if (!authenticatedUserId.equals(followerId)) {
+////            throw new ValidationException("Invalid userId.");
+////        }
         followService.followUser(followerId, followeeId);
         return new ResponseEntity<>(HttpStatus.OK) ;
     }
@@ -45,17 +46,17 @@ public class FollowController {
     )
     @PostMapping("/{followerId}/unfollow/{followeeId}")
     public ResponseEntity<HttpStatus> unfollowUser(@PathVariable String followerId, @PathVariable String followeeId) {
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(followerId)) {
-            throw new ValidationException("Invalid userId.");
-        }
+//        // Get the current HTTP request
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+//                .currentRequestAttributes()).getRequest();
+//
+//        // Get the authenticated userId from the request attribute
+//        String authenticatedUserId = (String) request.getAttribute("userId");
+//
+//        // Compare the authenticated userId with the userId from the path variable
+//        if (!authenticatedUserId.equals(followerId)) {
+//            throw new ValidationException("Invalid userId.");
+//        }
         followService.unfollowUser(followerId, followeeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

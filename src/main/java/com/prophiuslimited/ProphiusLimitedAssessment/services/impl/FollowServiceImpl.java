@@ -14,11 +14,12 @@ public class FollowServiceImpl implements FollowService {
     private final UserRepository userRepository;
     @Override
     public void followUser(String followerId, String followeeId) {
-        User follower = follows(followeeId);
+        User follower = follows(followerId);
        User followee = follows(followeeId);
       follower.getFollowing().add(followee);
       userRepository.save(follower);
     }
+
 
     private User follows(String userId){
         return userRepository.findByUserId(userId)
@@ -27,9 +28,10 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public void unfollowUser(String followerId, String followeeId) {
-        User follower = follows(followeeId);
+        User follower = follows(followerId);
         User followee = follows(followeeId);
         follower.getFollowing().remove(followee);
         userRepository.save(follower);
     }
 }
+
