@@ -25,6 +25,7 @@ public class PostLikeController {
 
     @Operation(summary = "Like a specific post. ",
             description = "If the post is already liked, its liked status is toggled. \n  " )
+
     @PutMapping("/{userId}/posts/{postId}/post-like")
     public ResponseEntity<ApiResponse<Object>> updatePostLike(@PathVariable String userId, @PathVariable Long postId) {
         // Get the current HTTP request

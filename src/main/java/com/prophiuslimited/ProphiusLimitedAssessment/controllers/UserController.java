@@ -8,6 +8,11 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponse
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,6 +24,12 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
+@Tag(name = "User Endpoint", description = "<h3>CRUD Operation for users: </h3> " +
+        "<ol>" +
+        "<li>Go to '/signup' endpoint to create a new user account.</li> " +
+        "<li>Proceed to '/login' endpoint to login to start performing CRUD operations.</li>" +
+        "<li>Copy the token returned if signup was successful to start using the app</li>" +
+        "</ol> " )
 public class UserController {
     private final ResponseManager responseManager;
     private final UserService userService;
@@ -37,13 +48,18 @@ public class UserController {
         return responseManager.success(userResponseDto);
     }
 
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Found the list of paginated users",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserController.class)) }),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Users not found",
+                    content = @Content) })
     @GetMapping()
     public ResponseEntity<ApiResponse<Object>> getUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
-            String username, String email) {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         Page<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
         return responseManager.success(userResponseDtos);
     }
@@ -55,7 +71,7 @@ public class UserController {
 
     }
     @DeleteMapping("/delete/{userId}")
-    public ResponseEntity <HttpStatus> deleteUser(@PathVariable String userId){
+    public ResponseEntity <HttpStatus> deleteUser( @Parameter(description = "id of user to be deleted") @PathVariable String userId){
         userService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
