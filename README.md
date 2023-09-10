@@ -95,11 +95,49 @@ This will compile the project.
 maven package
 ```
 This will package the application and generate the Jar file
-Next, to run the Spring Boot app from a command line you can use the java -jar command.
+Next, to run the Spring Boot app from a command line you can use the java -jar command and the name of the jar file.
 
 ```
 java -jar target/ProphiusLimitedAssessment-0.0.1-SNAPSHOT.jar
 ```
+
+You can also use Maven plugin to run the app. Use the below example to run your Spring Boot app with Maven plugin :
+```
+mvn spring-boot:run
+```
+
+## Running the server in a Docker Container ##
+Make sure the docker desktop is up and running in your machine before building the image from the docker file :
+run the following command :
+```
+docker build -t spring-boot-social-api . 
+```
+
+Command to run the container :
+
+```
+  docker run -p 8081:8081 spring-boot-social-api
+
+```
+
+Please note when you build the container image and if mysql is running locally on your system, you will need to specify the network name and container name in the command 
+and configure the application.properties to use the container name as the host name file to be able to connect to the database from within the container.
+
+```
+docker run --network springboot-mysql-net --name springboot-mysql-container -p 8081:8081 spring-boot-social-api
+```
+
+## Docker Compose ##
+Another alternative to run the application is to use the docker-compose.yml file, which is used to run multiple services in multiple containers.
+And to run the application, please execute the following command :
+
+```
+docker-compose up -d --build
+```
+
+## API Documentation ##
+It's as important to document (as is the development) and make your APIs available in a readable manner for frontend teams or external consumers.
+The tool for API documentation used in this project is Swagger, you can open the same inside a browser at the following url - [here](http://localhost:8081/swagger-ui/index.html#/)
 
 Some important api endpoints are as follows :
 
@@ -110,9 +148,6 @@ Some important api endpoints are as follows :
 - http://localhost:8081/api/v1/users/userId/posts/postId/comments (HTTP:POST)
 - http://localhost:8081/api/v1/users/userId/posts/postId/post_like (HTTP:POST)
 
-## API Documentation ##
-The tool for API documentation used is Swagger, 
-following url - [here](http://localhost:8081/swagger-ui/index.html#/)
 
 ## Development Challenges. ##
 During development, I faced challenges related to handling exceptions, validating user input, and managing database transactions. 
