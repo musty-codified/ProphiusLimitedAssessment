@@ -2,7 +2,9 @@ package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.CommentRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.CommentService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
@@ -28,8 +30,8 @@ public class CommentController {
 
     @Operation(summary = "Create a new comment for a post ")
     @PostMapping("/{userId}/posts/{postId}/comments")
-    public ResponseEntity<ApiResponse<Object>> createComment(@PathVariable String userId, @PathVariable Long postId,
-                                                             @RequestBody @Valid CommentRequestDto commentRequest) {
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable String userId, @PathVariable Long postId,
+                                                         @RequestBody @Valid CommentRequestDto commentRequest){
 
         // Get the current HTTP request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
@@ -43,7 +45,8 @@ public class CommentController {
             throw new ValidationException("Invalid userId.");
         }
         CommentResponseDto commentResponseDto = commentService.createComment(userId, postId, commentRequest);
-        return responseManager.success(commentResponseDto);
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+
     }
 
     @Operation(summary = "Retrieve the details of a comment")

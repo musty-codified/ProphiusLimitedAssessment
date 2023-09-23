@@ -42,10 +42,15 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final JwtUtils jwtUtil;
 
+    //implement registration, storing registrants in the SQL database
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
+
+        //Validate registration
         if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
+
+        //Remember registrant
             User user = User.builder()
                 .userId(appUtil.generateUserId(10))
                 .email(signupRequest.getEmail())
@@ -55,6 +60,7 @@ public class UserServiceImpl implements UserService {
                 .profilePicture("http://img")
                 .build();
 
+            //  Confirm registration
          User storedUser = userRepository.save(user);
             return Mapper.toUserDto(storedUser);
     }

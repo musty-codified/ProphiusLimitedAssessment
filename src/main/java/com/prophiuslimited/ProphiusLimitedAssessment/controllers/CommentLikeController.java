@@ -8,6 +8,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -27,7 +28,7 @@ public class CommentLikeController {
     @Operation(summary = "Like a specific comment.",
             description = "If the comment is already liked, its liked status is toggled. \n ")
     @PutMapping("/{userId}/posts/{postId}/comments/{commentId}/comment-like")
-    public ResponseEntity<ApiResponse<Object>> updateComment(@PathVariable String userId, @PathVariable Long postId,
+    public ResponseEntity<CommentLikeResponseDto> updateComment(@PathVariable String userId, @PathVariable Long postId,
                                                              @PathVariable Long commentId) {
 
         // Get the current HTTP request
@@ -42,7 +43,7 @@ public class CommentLikeController {
             throw new ValidationException("You are required to authenticate to like this comment.");
         }
         CommentLikeResponseDto commentLikeResponseDto = commentLikeService.updateCommentLike(userId, postId, commentId);
-        return responseManager.success(commentLikeResponseDto);
+        return new ResponseEntity<>(commentLikeResponseDto, HttpStatus.CREATED);
 
     }
 }

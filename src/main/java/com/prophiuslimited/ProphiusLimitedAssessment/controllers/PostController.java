@@ -1,7 +1,9 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
@@ -29,8 +31,8 @@ public class PostController {
 
     @Operation(summary = "Create a new post for a specific user")
     @PostMapping("/{userId}/posts")
-    public ResponseEntity<ApiResponse<Object>> createPost(@PathVariable String userId,
-                                                          @RequestBody @Valid PostRequestDto postRequest) {
+    public ResponseEntity<PostResponseDto> createPost(@PathVariable String userId,
+                                                      @RequestBody @Valid PostRequestDto postRequest){
 
         // Get the current HTTP request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
@@ -44,10 +46,9 @@ public class PostController {
             throw new ValidationException("Invalid userId.");
         }
         PostResponseDto postResponseDto = postService.createPost(userId, postRequest);
+        return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
 
-        return responseManager.success(postResponseDto);
     }
-
     @Operation(summary = "Retrieve the details of a specific post")
     @GetMapping("/{userId}/posts/{postId}")
     public ResponseEntity<ApiResponse<Object>> getPost(@PathVariable String userId, @PathVariable Long postId) {

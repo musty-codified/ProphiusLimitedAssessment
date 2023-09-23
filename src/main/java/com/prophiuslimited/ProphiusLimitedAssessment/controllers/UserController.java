@@ -37,9 +37,10 @@ public class UserController {
     @Operation(summary = "Create a new user account",
             description = "After creating your account, Proceed to login. \n")
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<Object>> createUser(@RequestBody @Valid SignupRequestDto signupRequest) {
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid SignupRequestDto signupRequest){
         UserResponseDto userResponseDto = userService.signUp(signupRequest);
-        return responseManager.success(userResponseDto);
+        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+
     }
 
     @GetMapping("/{userId}")
