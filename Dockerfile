@@ -1,10 +1,11 @@
 
-FROM eclipse-temurin:17
+FROM openjdk:17
 
 #LABEL mentor="ilemonamustapha@gmail.com"
 
 #WORKDIR /app
+EXPOSE 8080
 
-COPY target/socialmedia.jar /socialmedia.jar
+ADD target/socialmedia.jar /socialmedia.jar
 
 ENTRYPOINT ["java", "-jar", "/socialmedia.jar"]

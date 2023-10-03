@@ -27,10 +27,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn clean
+        run: mvn clean install
 
       - name: Build & Push To Docker Hub
-        uses: mr-smithers-excellent/docker-build-push@v6
+        uses: mr-smithers-excellent/docker-build-push@v5
         with:
             image: mustycodified/socialmedia-api
             tags: latest
