@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysqldb:
-    container_name: mysql_db
+    container_name: mysqldb
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: papimaciano
@@ -11,21 +11,17 @@ services:
      springboot-mysql-net:
 
   springboot-socialmedia-api:
-    container_name: socialmedia-api
+    container_name: springboot-socialmedia-api
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: papimaciano
+      - "8090:8090"
     depends_on:
       - mysqldb
     networks:
       springboot-mysql-net:
     restart: on-failure
-
 
 networks:
     springboot-mysql-net:

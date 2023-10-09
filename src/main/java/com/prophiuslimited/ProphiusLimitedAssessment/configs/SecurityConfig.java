@@ -24,15 +24,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-
     private final CustomUserDetailService customUserDetailService;
     private final PasswordEncoder passwordEncoder;
-
     private final JwtAuthFilter jwtAuthFilter;
     private static final String [] WHITE_LISTED_URLS = {
-            "/api/v1/users/**", "/v3/api-docs/**", "/configuration/**",
-            "/swagger*/**", "/swagger-ui/**",
+            "/api/v1/users/**" , "/v3/api-docs/**", "/configuration/**",
+            "/api/v1/user/**" , "/swagger*/**", "/swagger-ui/**",
             "/webjars/**", "/actuator/health"
     };
 
