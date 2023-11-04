@@ -49,10 +49,4 @@ public class PostLikeController {
 
     }
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid SignupRequestDto signupRequest){
-//        UserResponseDto userResponseDto = userService.signUp(signupRequest);
-//        return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
-//
-//    }
 }

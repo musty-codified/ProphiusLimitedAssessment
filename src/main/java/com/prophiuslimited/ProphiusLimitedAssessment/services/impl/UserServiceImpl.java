@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final JwtUtils jwtUtil;
 
-    //implement registration, storing registrants in the SQL database
+    //Implement registration, storing registrants in the SQL database
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
 
@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
 
         List<UserResponseDto> userResponseDtos = userPage.stream()
                 .map(Mapper::toUserDto).collect(Collectors.toList());
+        //.map(user->Mapper.toUserDto(user))
         if (page > 0) page = page -1;
         int max = Math.min(limit * (page + 1), userResponseDtos.size());
         int min = page * limit;

@@ -14,7 +14,7 @@ on:
   pull_request:
     branches: [ "main" ]
 env:
-  APP_DB: local
+  APP_DB: github
 
 jobs:
   build:

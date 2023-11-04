@@ -20,6 +20,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     private final PostLikeRepository postLikeRepository;
 
     private final JwtUtils jwtUtil;
+    private Map<Integer, PostLike> postLikeMap = new HashMap<>();
 
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 
@@ -42,6 +46,8 @@ public class PostLikeServiceImpl implements PostLikeService {
 
         PostLike postLike = postLikeRepository.findAllByUserIdAndPostId(userId, postId);
         logger.info("postLike " + postLike);
+
+
 
         if (postLike == null) {
             // If the postLike doesn't exist, create a new one and set its properties
