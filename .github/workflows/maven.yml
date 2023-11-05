@@ -18,7 +18,7 @@ env:
 
 jobs:
   build:
-
+#specifies the VMs on github to run the job
     runs-on: ubuntu-latest
 
     steps:
