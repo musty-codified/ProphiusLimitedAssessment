@@ -1,5 +1,5 @@
 # Social-Media-API
-The backend api for a social media application
+The backend REST API for a social media application
 
 ## Database Schema ##
 - The _User_ entity keeps the details of users along with their posts and follows
@@ -8,7 +8,7 @@ The backend api for a social media application
 - The _PostLike_ entity has the data of all the likes for a particular post
 - The _CommentLike_ entity keeps the details of all the likes for a particular comment
 - The _Followers_ entity keep the information about all the users who follow a user
-- The _Following_ entity keep the information about all the users whom a user followers
+- The _Following_ entity keep the information about all the users whom a user follows
 
 ## Technology ##
 Following tools and libraries were used during the development of API :
@@ -22,7 +22,7 @@ Following tools and libraries were used during the development of API :
 
 
 ## Overview of the Architecture ##
-I have organized the project into layers, such as Controller, Service, and Repository layers, to follow the separation of concerns principle.
+I have organized the project into layers, such as Controller, Service, and Repository layers, to follow the separation of concerns (MVC) pattern.
 
 **_Entities & DTOs_**
 The various entities or model of the application are organized under the **_entities_** package. BaseEntity class, which all other entities extend from, holds common data and behaviour. 
@@ -32,9 +32,9 @@ You can find the mapper under the **_utils package_**.
 
 **_DAOs_**
 The data access objects (DAOs) are present in the **_repositories_** package. 
-They are all extensions of the JpaRepository Interface helping the service layer to persist and retrieve the data from MySQL.
-The service layer is defined in the **_services_** package and its implementation can be found under the **_services/impl_** sub-package. 
-considering the current case study it made sense to create six services - UserService, PostService, CommentService, CommentLikeService, PostLikeService, FollowService, 
+They are all extensions of the JpaRepository Interface helping the service layer to persist and retrieve the data from MySQL database.
+The service Interfaces are defined in the **_services_** package and their implementations can be found under the **_services/impl_** sub-package. 
+Considering the current case study it made sense to create six services - UserService, PostService, CommentService, CommentLikeService, PostLikeService, FollowService, 
 to satisfy the different business operations.
 
 **_Security_**
@@ -90,18 +90,18 @@ Using the following commands:
 ```
 maven clean compile
 ```
-This will compile the project.
+This will compile the project and reveal any error or bug it might have.
 ```
-maven package
+maven install
 ```
-This will package the application and generate the Jar file
-Next, to run the Spring Boot app from a command line you can use the java -jar command and the name of the jar file.
-
+This will package the application into an executable Jar file that resides in a target folder created by maven.
+Run the Spring Boot app from the command line using the java -jar followed by the name of the jar file.
+Note: You can copy this jar file into a different folder and run it. Just as you could take it and deploy it in a remote server
 ```
 java -jar target/ProphiusLimitedAssessment-0.0.1-SNAPSHOT.jar
 ```
 
-You can also use Maven plugin to run the app. Use the below example to run your Spring Boot app with Maven plugin :
+Alternatively, run the app using Maven plugin:
 ```
 mvn spring-boot:run
 ```
@@ -121,7 +121,7 @@ Command to run the container :
 ```
 
 Please note when you build the container image and if mysql is running locally on your system, you will need to specify the network name and container name in the command 
-and configure the application.properties to use the container name as the host name file to be able to connect to the database from within the container.
+and configure the application.properties to use the mySQL container name as the host name file to be able to connect to the database from within the container.
 
 ```
 docker run --network springboot-mysql-net --name springboot-mysql-container -p 8081:8081 spring-boot-social-api
