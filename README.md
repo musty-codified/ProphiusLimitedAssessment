@@ -15,7 +15,7 @@ Following tools and libraries were used during the development of API :
 - **Java 17** - Java version
 - **Spring Boot** - Server side framework
 - **Build Tool: Maven**
-- **MySQL** - Database
+- **PostgreSQL** - Relational Database
 - **Swagger** - API documentation [here](http://localhost:8081/swagger-ui/index.html#/)
 - **JWT** - Authentication mechanism for REST APIs
 - **Docker** - Containerizing framework
@@ -37,7 +37,7 @@ The service Interfaces are defined in the **_services_** package and their imple
 Considering the current case study it made sense to create six services - UserService, PostService, CommentService, CommentLikeService, PostLikeService, FollowService, 
 to satisfy the different business operations.
 
-**_Security_**
+**_Authentication & Authorization_**
 The security setting are present under the **_configs_** package and the JWT token based authentication mechanism are present in the **_security_** package.
 
 **_Controllers_**
@@ -107,7 +107,7 @@ mvn spring-boot:run
 ```
 
 ## Running the server in a Docker Container ##
-Make sure the docker desktop is up and running in your machine before building the image from the docker file :
+Make sure docker desktop is up and running in your machine before building the image from the docker file :
 run the following command :
 ```
 docker build -t spring-boot-social-api . 
