@@ -31,8 +31,6 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
 
     private final AppUtils appUtil;
-
-    private final PostLikeRepository postLikeRepository;
     private final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Override
