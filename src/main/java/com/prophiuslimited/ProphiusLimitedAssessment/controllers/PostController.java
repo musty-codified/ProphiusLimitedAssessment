@@ -29,8 +29,7 @@ public class PostController {
 
     @Operation(summary = "Create a new post for a specific user")
     @PostMapping("/{userId}/posts")
-    public ResponseEntity<PostResponseDto> createPost(@PathVariable String userId,
-                                                      @RequestBody @Valid PostRequestDto postRequest){
+    public ResponseEntity<PostResponseDto> createPost(@PathVariable String userId, @Valid @RequestBody PostRequestDto postRequest){
 
         // Get the current HTTP request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
@@ -43,8 +42,7 @@ public class PostController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        PostResponseDto postResponseDto = postService.createPost(userId, postRequest);
-        return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(postService.createPost(userId, postRequest), HttpStatus.CREATED);
 
     }
     @Operation(summary = "Retrieve the details of a specific post")

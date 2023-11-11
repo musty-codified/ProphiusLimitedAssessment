@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         User newUser = appUtil.getMapper().convertValue(signupRequest, User.class);
         newUser.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         newUser.setUserId(appUtil.generateUserId(10));
-        newUser.setProfilePicture("http://img");
+        newUser.setProfilePicture("http://img//jpeg");
 
             //  Confirm registration
          User storedUser = userRepository.save(newUser);
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    //Update User endpoint not protected. Fix it later
+    //Update User endpoint not protected. You need to implement role-based access control
     @Override
     public UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto) {
         User user = userRepository.findByUserId(userId).
@@ -105,8 +105,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    //Delete User endpoint not protected. Fix it later
-
+    //Delete User endpoint not protected. You need to implement role-based access control
     @Override
     public void deleteUser(String userId) {
         User user = userRepository.findByUserId(userId)

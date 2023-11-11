@@ -19,7 +19,7 @@ public class AuthController {
     private final UserService userService;
     private final ResponseManager responseManager;
 
-    @Operation(summary = "Login a user",
+    @Operation(summary = "Authenticate a user to generate a JWT token",
             description = "Copy the generated token returned in the response object and enter it in the authorization header. \n"
         + "Once authenticated, you can then start performing CRUD operations on protected endpoints. \n")
     @PostMapping("/login")

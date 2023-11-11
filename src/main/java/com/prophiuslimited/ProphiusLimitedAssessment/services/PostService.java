@@ -4,8 +4,6 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDt
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
 import org.springframework.data.domain.Page;
 
-
-
 public interface PostService {
 
     PostResponseDto createPost(String userId, PostRequestDto postRequest);

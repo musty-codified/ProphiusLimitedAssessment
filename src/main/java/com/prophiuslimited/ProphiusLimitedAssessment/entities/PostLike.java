@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Builder
 public class PostLike extends BaseEntity{
     private boolean liked;
+    //this refers to liker of the post
     private String userId;
     @ManyToOne
     @JoinColumn(name = "posts_id")
