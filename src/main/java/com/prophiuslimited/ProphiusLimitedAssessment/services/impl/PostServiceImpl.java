@@ -46,7 +46,6 @@ public class PostServiceImpl implements PostService {
                 .user(user)
                 .likesCount(0)
                 .build();
-        //Create
             PostLike postLike = new PostLike();
             postLike.setLiked(false); // Set the default liked status if needed
             postLike.setPost(post);   // Associate the PostLike with the new Post
