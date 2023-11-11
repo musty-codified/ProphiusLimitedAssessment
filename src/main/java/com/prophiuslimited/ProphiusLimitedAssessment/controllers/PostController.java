@@ -1,12 +1,10 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.PostRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostResponseDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostService;
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

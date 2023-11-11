@@ -1,6 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.utils;
 
 
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

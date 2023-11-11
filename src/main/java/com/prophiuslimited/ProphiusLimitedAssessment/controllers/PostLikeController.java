@@ -1,10 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
 
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.SignupRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.PostLikeResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostLikeService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
@@ -17,7 +14,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 
 @RestController

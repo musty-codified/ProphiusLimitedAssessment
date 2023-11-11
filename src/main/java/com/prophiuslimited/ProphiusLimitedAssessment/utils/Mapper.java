@@ -16,13 +16,6 @@ import java.util.List;
 public class Mapper {
 
     private static final Logger logger = LoggerFactory.getLogger(Mapper.class);
-    public static UserResponseDto toUserDto(User user) {
-        return UserResponseDto.builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .build();
-    }
 
     public static PostResponseDto toPostDto(Post post) {
 

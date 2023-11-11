@@ -66,9 +66,7 @@ public class JwtUtils {
 
     public String generateToken(String email, String userId) {
         Map<String, Object> claims = new HashMap<>();
-//      User user = userRepository.findByEmail(email)
-//              .orElseThrow(()-> new ValidationException("Error generating token "));
-        claims.put("userId", userId);
+      claims.put("userId", userId);
         return createToken(claims, email);
     }
     private String createToken(Map<String, Object> claims, String email) {

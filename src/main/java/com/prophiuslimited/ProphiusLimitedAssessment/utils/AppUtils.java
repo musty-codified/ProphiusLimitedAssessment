@@ -49,11 +49,13 @@ public class AppUtils {
         return new String(returnValue);
     }
 
-    public Long generateOTP(){
-        Random rand = new Random();
-        Long number = (long) rand.nextInt(999999);
-
-        return number;
+    public boolean validEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+    }
+    public ObjectMapper getMapper(){
+        ObjectMapper mapper= new ObjectMapper();
+        return mapper;
     }
 
 }

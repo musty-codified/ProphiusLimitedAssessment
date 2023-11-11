@@ -28,7 +28,7 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthFilter jwtAuthFilter;
     private static final String [] WHITE_LISTED_URLS = {
-            "/api/v1/users/**" , "/v3/api-docs/**", "/configuration/**",
+            "/api/v1/users/signup" , "/v3/api-docs/**", "/configuration/**",
             "/api/v1/user/**" , "/swagger*/**", "/swagger-ui/**",
             "/webjars/**", "/actuator/health"
     };

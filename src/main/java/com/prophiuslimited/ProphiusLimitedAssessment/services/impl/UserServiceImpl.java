@@ -8,6 +8,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponse
 import com.prophiuslimited.ProphiusLimitedAssessment.entities.User;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.RecordAlreadyExistException;
 import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.UserNotFoundException;
+import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.UserRepository;
 import com.prophiuslimited.ProphiusLimitedAssessment.security.CustomUserDetailService;
 import com.prophiuslimited.ProphiusLimitedAssessment.security.JwtUtils;
@@ -47,37 +48,29 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
 
         //Validate registration
+        if(!appUtil.validEmail(signupRequest.getEmail()))
+            throw new ValidationException("Invalid email address") ;
         if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
 
         //Remember registrant
-            User user = User.builder()
-                .userId(appUtil.generateUserId(10))
-                .email(signupRequest.getEmail())
-                .password(passwordEncoder.encode(signupRequest.getPassword()))
-                .username(signupRequest.getUsername())
-                .posts(new HashSet<>())
-                .profilePicture("http://img")
-                .build();
+        User newUser = appUtil.getMapper().convertValue(signupRequest, User.class);
+        newUser.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        newUser.setUserId(appUtil.generateUserId(10));
+        newUser.setProfilePicture("http://img");
 
             //  Confirm registration
-         User storedUser = userRepository.save(user);
-            return Mapper.toUserDto(storedUser);
+         User storedUser = userRepository.save(newUser);
+            return appUtil.getMapper().convertValue(storedUser, UserResponseDto.class);
     }
 
     @Override
     public UserResponseDto getUser(String userId) {
-      User user =  userRepository.findByUserId(userId)
+      User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found with ID " + userId));
-        return Mapper.toUserDto(user);
+        return appUtil.getMapper().convertValue(user, UserResponseDto.class);
     }
 
-    @Override
-    public UserResponseDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new UserNotFoundException("User not found with email " + email));
-        return Mapper.toUserDto(user);
-    }
 
     @Override
     public Page<UserResponseDto> getUsers(int page, int limit, String sortBy, String sortDir) {
@@ -88,8 +81,10 @@ public class UserServiceImpl implements UserService {
         Page<User> userPage = userRepository.findAll(pageableRequest);
 
         List<UserResponseDto> userResponseDtos = userPage.stream()
-                .map(Mapper::toUserDto).collect(Collectors.toList());
-        //.map(user->Mapper.toUserDto(user))
+                .map(user -> appUtil.getMapper().convertValue(user, UserResponseDto.class))
+                .collect(Collectors.toList());
+
+              //Pagination starts from page zero. This logic aligns it so it conforms to the convention
         if (page > 0) page = page -1;
         int max = Math.min(limit * (page + 1), userResponseDtos.size());
         int min = page * limit;
@@ -97,18 +92,20 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    //Update User endpoint not protected. Fix it later
     @Override
     public UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto) {
         User user = userRepository.findByUserId(userId).
                 orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setEmail(updateRequestDto.getEmail());
         user.setUsername(updateRequestDto.getUsername());
-        user.setUserId(appUtil.generateUserId(10));
         User updatedUser = userRepository.save(user);
 
-        return Mapper.toUserDto(updatedUser);
+        return appUtil.getMapper().convertValue(updatedUser, UserResponseDto.class);
 
     }
+
+    //Delete User endpoint not protected. Fix it later
 
     @Override
     public void deleteUser(String userId) {
@@ -133,9 +130,9 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = customUserDetailService.loadUserByUsername(request.getEmail());
-
+        System.out.println(userDetails);
         String token = jwtUtil.generateToken(userDetails.getUsername(), user.getUserId());
-
+        System.out.println("Token is :"+ token);
          LoginResponseDto responseDto = LoginResponseDto.builder()
                  .username(user.getUsername())
                  .email(user.getEmail())

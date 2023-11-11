@@ -1,8 +1,7 @@
-package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
+package com.prophiuslimited.ProphiusLimitedAssessment.controllers.auth;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.ApiResponse;
+import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.ApiResponse;
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.LoginRequestDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.LoginResponseDto;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,8 +24,7 @@ public class AuthController {
         + "Once authenticated, you can then start performing CRUD operations on protected endpoints. \n")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody LoginRequestDto request) {
-        LoginResponseDto loginResponseDto = userService.login(request);
-        return responseManager.success(loginResponseDto);
+        return responseManager.success(userService.login(request));
     }
 
 }

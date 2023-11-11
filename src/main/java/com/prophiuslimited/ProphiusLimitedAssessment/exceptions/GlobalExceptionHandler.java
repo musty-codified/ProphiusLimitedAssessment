@@ -53,7 +53,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
         ErrorResponse errorMessage = new ErrorResponse(new Date(), ex.getMessage());
-        errorMessage.setDebugMessage("Error validating user credential");
+        errorMessage.setDebugMessage("Error: validation failed");
 
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
