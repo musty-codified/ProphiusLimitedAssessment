@@ -1,10 +1,13 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "post_like")
 @AllArgsConstructor
@@ -14,7 +17,6 @@ import javax.persistence.*;
 @Builder
 public class PostLike extends BaseEntity{
     private boolean liked;
-    //this refers to liker of the post
     private String userId;
     @ManyToOne
     @JoinColumn(name = "posts_id")
