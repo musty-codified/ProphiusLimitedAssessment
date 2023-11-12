@@ -2,6 +2,8 @@ package com.prophiuslimited.ProphiusLimitedAssessment.utils;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -17,6 +19,7 @@ public class AppUtils {
         return generateRandomString(length);
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppUtils.class);
     public String getFormattedNumber(final String number){
         String trimmedNumber = number.trim();
         String formattedNumber = null;
@@ -49,6 +52,14 @@ public class AppUtils {
         return new String(returnValue);
     }
 
+    public void print(Object obj){
+        try {
+            LOGGER.info(new ObjectMapper().writeValueAsString(obj));
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
     public boolean validEmail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);

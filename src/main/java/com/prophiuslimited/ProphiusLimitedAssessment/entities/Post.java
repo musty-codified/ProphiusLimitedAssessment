@@ -33,7 +33,9 @@ public class Post extends BaseEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
 
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("post")
     private Set<PostLike> postLikes = new HashSet<>();
 
 }

@@ -4,7 +4,6 @@ import com.prophiuslimited.ProphiusLimitedAssessment.dtos.requests.CommentReques
 import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.CommentResponseDto;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 public interface CommentService {
     CommentResponseDto createComment(String userId, Long postId, CommentRequestDto commentRequest);

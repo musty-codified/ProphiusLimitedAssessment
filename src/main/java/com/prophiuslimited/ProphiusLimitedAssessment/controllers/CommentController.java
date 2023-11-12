@@ -42,8 +42,7 @@ public class CommentController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        CommentResponseDto commentResponseDto = commentService.createComment(userId, postId, commentRequest);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.createComment(userId, postId, commentRequest), HttpStatus.CREATED);
 
     }
 

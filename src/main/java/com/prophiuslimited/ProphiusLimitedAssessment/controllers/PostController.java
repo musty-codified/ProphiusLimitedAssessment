@@ -60,8 +60,7 @@ public class PostController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        PostResponseDto postResponseDto = postService.getPost(userId, postId);
-        return responseManager.success(postResponseDto);
+        return responseManager.success(postService.getPost(userId, postId));
 
     }
     @Operation(summary = "Retrieve all posts for a specific user")
@@ -82,15 +81,14 @@ public class PostController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        Page<PostResponseDto> postResponseDtos = postService.getPosts(userId, page, limit, sortBy, sortDir);
-        return responseManager.success(postResponseDtos);
+        return responseManager.success(postService.getPosts(userId, page, limit, sortBy, sortDir));
 
     }
 
     @Operation(summary = "Update a specific post")
     @PutMapping("/{userId}/posts/{postId}")
     public ResponseEntity<ApiResponse<Object>> updatePost(@PathVariable String userId, @PathVariable Long postId,
-                                                          @RequestBody @Valid PostRequestDto postRequest) {
+                                                          @Valid @RequestBody PostRequestDto postRequest) {
         // Get the current HTTP request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes()).getRequest();
@@ -102,8 +100,7 @@ public class PostController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        PostResponseDto postResponseDto = postService.updatePost(userId, postId, postRequest);
-        return responseManager.success(postResponseDto);
+        return responseManager.success(postService.updatePost(userId, postId, postRequest));
 
     }
 

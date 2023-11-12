@@ -20,6 +20,7 @@ public class PostLike extends BaseEntity{
     private String userId;
     @ManyToOne
     @JoinColumn(name = "posts_id")
+    @JsonIgnoreProperties("postLikes")
     private Post post;
 
 
