@@ -10,28 +10,25 @@ import com.prophiuslimited.ProphiusLimitedAssessment.repositories.CommentReposit
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.PostRepository;
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.UserRepository;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.CommentService;
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.Mapper;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final AppUtils appUtil;
     private final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Override
@@ -41,28 +38,26 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with ID: " + postId));
 
         Set<CommentLike> commentLikes = new HashSet<>();
-
-        Comment comment = Comment.builder()
-               .body(commentRequest.getBody())
-               .userId(commentRequest.getUserId())
-               .username(commentRequest.getUsername())
-               .post(post)
-               .build();
+        Comment newComment = appUtil.getMapper().convertValue(commentRequest, Comment.class);
+        newComment.setPost(post);
 
         CommentLike commentLike = new CommentLike();
         commentLike.setLiked(false); // Set the default liked status if needed
-        commentLike.setComment(comment);// Associate the CommentLike with the new Comment
+        commentLike.setComment(newComment);// Associate the CommentLike with the new Comment
         commentLike.setUserId(userId);
         commentLike.setPostId(postId);
         commentLikes.add(commentLike);
 
-        comment.setCommentLikes(commentLikes);
+        newComment.setCommentLikes(commentLikes);
 
-        post.getComments().add(comment);
+        post.getComments().add(newComment);
 
-        Comment savedComment = commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(newComment);
 
-        return Mapper.toCommentDto(savedComment);
+      CommentResponseDto commentResponseDto =
+              appUtil.getMapper().convertValue(savedComment, CommentResponseDto.class);
+      commentResponseDto.setPostId(postId);
+        return commentResponseDto;
     }
 
     @Override
@@ -71,11 +66,12 @@ public class CommentServiceImpl implements CommentService {
         userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
         postRepository.findById(postId)
-                .orElseThrow(()-> new ResourceNotFoundException("Post resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
       Comment comment = commentRepository.findByPostIdAndId(postId, commentId)
-                      .orElseThrow(()-> new ResourceNotFoundException("Comment Resource not found"));
-
-        return Mapper.toCommentDto(comment);
+                      .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
+      CommentResponseDto commentResponseDto = appUtil.getMapper().convertValue(comment, CommentResponseDto.class);
+      commentResponseDto.setPostId(postId);
+        return commentResponseDto;
     }
 
     @Override
@@ -84,34 +80,44 @@ public class CommentServiceImpl implements CommentService {
                 :Sort.by(sortBy).descending();
        userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
-
         postRepository.findById(postId)
-                .orElseThrow(()-> new UserNotFoundException("Post not found"));
-             if(cPage>0) cPage = cPage-1;
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
 
-        return commentRepository.findAllByUserIdAndPostId(userId, postId, PageRequest.of(cPage, cLimit, sort))
-                .map(Mapper::toCommentDto);
+        Pageable pageRequest = PageRequest.of(cPage, cLimit, sort);
+        Page <Comment> commentPages = commentRepository.findAllByUserIdAndPostId(userId, postId, pageRequest);
+        List <CommentResponseDto> commentResponseDtos =
+                commentPages.stream().map(comment -> appUtil.getMapper().convertValue(comment, CommentResponseDto.class))
+                        .collect(Collectors.toList());
+        commentResponseDtos.forEach(commentResponseDto ->
+            commentResponseDto.setPostId(postId));
+
+             if(cPage>0) cPage = cPage-1;
+          int max = Math.min(cLimit * (cPage + 1), commentResponseDtos.size());
+          int min = cPage * cLimit;
+
+        return new PageImpl<>(commentResponseDtos.subList(min, max), pageRequest, commentResponseDtos.size());
 
     }
 
     @Override
     public CommentResponseDto updateComment(String userId, Long postId, Long commentId, CommentRequestDto commentRequest) {
 
-      User user =  userRepository.findByUserId(userId)
+      User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
-      Post post =  postRepository.findById(postId)
+      Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
-        Comment existingComment = commentRepository.findById(commentId)
+     Comment existingComment = commentRepository.findById(commentId)
                 .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
-        if (!existingComment.getPost().getUser().equals(user) && !existingComment.getPost().equals(post))  {
-            throw new UnauthorizedUserException("You are not authorized to update this comment");
-        }
+
         existingComment.setBody(commentRequest.getBody());
         existingComment.setPost(post);
-        existingComment.setUsername(commentRequest.getUsername());
-        existingComment.setUserId(commentRequest.getUserId());
-        Comment updatedComment = commentRepository.save(existingComment);
-        return Mapper.toCommentDto(updatedComment);
+       Comment updatedComment = commentRepository.save(existingComment);
+
+       CommentResponseDto commentResponseDto =
+               appUtil.getMapper().convertValue(updatedComment, CommentResponseDto.class);
+       commentResponseDto.setPostId(commentRequest.getPostId());
+       commentResponseDto.setUserId(commentRequest.getUserId());
+        return commentResponseDto;
     }
 
     @Override
@@ -119,14 +125,14 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found"));
         Post post = postRepository.findById(postId)
-                .orElseThrow(()-> new ResourceNotFoundException("Post resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found"));
       Comment comment = commentRepository.findById(commentId)
-              .orElseThrow(()-> new ResourceNotFoundException("Comment resource not found"));
-
-        logger.info("User " + user);
-        logger.info("Post " + post);
-        if (comment.getPost().getUser().equals(user) && comment.getPost().equals(post))
+              .orElseThrow(()-> new ResourceNotFoundException("Comment not found"));
+        if (!comment.getUserId().equals(user.getUserId())) {
+            throw new UnauthorizedUserException("Forbidden");
+        }
             commentRepository.delete(comment);
+
 
     }
 }

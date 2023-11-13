@@ -30,9 +30,9 @@ public class Post extends BaseEntity{
     @JsonIgnore
     private User user;
 
+    @JsonIgnoreProperties("post")
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<>();
-
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("post")

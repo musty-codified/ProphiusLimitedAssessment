@@ -65,6 +65,7 @@ public class UserController {
         return responseManager.success(userService.updateUser(userId, request));
 
     }
+
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity <HttpStatus> deleteUser( @Parameter(description = "id of user to be deleted") @PathVariable String userId){
         userService.deleteUser(userId);

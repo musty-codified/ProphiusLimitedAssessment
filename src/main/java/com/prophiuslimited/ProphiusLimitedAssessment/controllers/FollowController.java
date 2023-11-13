@@ -1,16 +1,10 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.controllers;
-import com.prophiuslimited.ProphiusLimitedAssessment.exceptions.ValidationException;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.FollowService;
-import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public class FollowController {
     private final FollowService followService;
 
-    @Operation(summary = "Endpoint to follow a user. ",
-    description = "Add a specific user to followers list"
-    )
-
+    @Operation(summary = "Endpoint to follow a user. ", description = "Add a specific user to followers list")
     @PostMapping("/{followerId}/follow/{followeeId}")
     public ResponseEntity<HttpStatus> followUser(@PathVariable String followerId, @PathVariable String followeeId) {
 
@@ -29,9 +20,7 @@ public class FollowController {
         return new ResponseEntity<>(HttpStatus.OK) ;
     }
 
-    @Operation(summary = "Endpoint to Unfollow a user. ",
-     description = "Remove a specific user from followers list"
-    )
+    @Operation(summary = "Endpoint to Unfollow a user. ", description = "Remove a specific user from followers list")
     @PostMapping("/{followerId}/unfollow/{followeeId}")
     public ResponseEntity<HttpStatus> unfollowUser(@PathVariable String followerId, @PathVariable String followeeId) {
 

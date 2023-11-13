@@ -107,7 +107,7 @@ mvn spring-boot:run
 ```
 
 ## Running the server in a Docker Container ##
-Make sure docker desktop is up and running in your machine before building the image from the docker file :
+Ensure docker desktop is up and running in your machine before building the image from the docker file :
 run the following command :
 ```
 docker build -t spring-boot-social-api . 
@@ -128,7 +128,7 @@ docker run --network springboot-mysql-net --name springboot-mysql-container -p 8
 ```
 
 ## Docker Compose ##
-Another alternative to run the application is to use the docker-compose.yml file, which is used to run multiple services in multiple containers.
+Or use the docker-compose.yml file, which is used to run multiple services in multiple containers.
 And to run the application, please execute the following command :
 
 ```

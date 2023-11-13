@@ -9,7 +9,6 @@ import com.prophiuslimited.ProphiusLimitedAssessment.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +30,6 @@ public class PostController {
     @PostMapping("/{userId}/posts")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable String userId, @Valid @RequestBody PostRequestDto postRequest){
 
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         return new ResponseEntity<>(postService.createPost(userId, postRequest), HttpStatus.CREATED);
 
     }
@@ -49,17 +37,6 @@ public class PostController {
     @GetMapping("/{userId}/posts/{postId}")
     public ResponseEntity<ApiResponse<Object>> getPost(@PathVariable String userId, @PathVariable Long postId) {
 
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         return responseManager.success(postService.getPost(userId, postId));
 
     }
@@ -70,17 +47,6 @@ public class PostController {
                                                         @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                         @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         return responseManager.success(postService.getPosts(userId, page, limit, sortBy, sortDir));
 
     }
@@ -89,17 +55,6 @@ public class PostController {
     @PutMapping("/{userId}/posts/{postId}")
     public ResponseEntity<ApiResponse<Object>> updatePost(@PathVariable String userId, @PathVariable Long postId,
                                                           @Valid @RequestBody PostRequestDto postRequest) {
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         return responseManager.success(postService.updatePost(userId, postId, postRequest));
 
     }

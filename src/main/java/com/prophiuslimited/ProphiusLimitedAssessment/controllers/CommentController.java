@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,18 +31,6 @@ public class CommentController {
     @PostMapping("/{userId}/posts/{postId}/comments")
     public ResponseEntity<CommentResponseDto> createComment(@PathVariable String userId, @PathVariable Long postId,
                                                          @RequestBody @Valid CommentRequestDto commentRequest){
-
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         return new ResponseEntity<>(commentService.createComment(userId, postId, commentRequest), HttpStatus.CREATED);
 
     }
@@ -51,19 +40,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Object>> getComment(@PathVariable String userId, @PathVariable Long postId,
                                                           @PathVariable Long commentId) {
 
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
-        CommentResponseDto commentResponseDto = commentService.getComment(userId, postId, commentId);
-        return responseManager.success(commentResponseDto);
+        return responseManager.success(commentService.getComment(userId, postId, commentId));
 
     }
 
@@ -74,22 +51,11 @@ public class CommentController {
                                                            @RequestParam(value = "limit", defaultValue = "5") int cLimit,
                                                            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
                                                            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
-        Page<CommentResponseDto> commentResponseDtos = commentService.getComments(userId, postId, cPage, cLimit, sortBy, sortDir);
-        return responseManager.success(commentResponseDtos);
+        return responseManager.success(commentService.getComments(userId, postId, cPage, cLimit, sortBy, sortDir));
 
     }
+//    @PreAuthorize("#comment.username == authentication.principal.username")
+    @PreAuthorize("#commentRequest.userId == authentication.principal.userId")
     @Operation(summary = "Update a specific comment ")
     @PutMapping("/{userId}/posts/{postId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<Object>> updateComment(@PathVariable String userId, @PathVariable Long postId,
@@ -106,26 +72,15 @@ public class CommentController {
         if (!authenticatedUserId.equals(userId)) {
             throw new ValidationException("Invalid userId.");
         }
-        CommentResponseDto commentResponseDto = commentService.updateComment(userId, postId,commentId, commentRequest);
-        return responseManager.success(commentResponseDto);
+        return responseManager.success(commentService.updateComment(userId, postId,commentId, commentRequest));
 
     }
+
+    @PreAuthorize("#userId == principal.userId")
     @Operation(summary = "Delete a specific comment for a post")
     @DeleteMapping("/{userId}/posts/{postId}/comments/{commentId}/delete")
     public ResponseEntity <HttpStatus> deleteComment(@PathVariable String userId, @PathVariable Long postId,
                                                      @PathVariable Long commentId){
-
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
-
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid userId.");
-        }
         commentService.deleteComment(userId, postId, commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

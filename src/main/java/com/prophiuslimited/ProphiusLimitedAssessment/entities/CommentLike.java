@@ -1,6 +1,7 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -23,5 +24,6 @@ public class CommentLike extends BaseEntity{
     private String userId;
     @ManyToOne
     @JoinColumn(name = "comments_id")
+    @JsonIgnoreProperties("commentLikes")
     private Comment comment;
 }

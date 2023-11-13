@@ -10,10 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -28,20 +24,8 @@ public class PostLikeController {
 
     @PutMapping("/{userId}/posts/{postId}/post-like")
     public ResponseEntity<PostLikeResponseDto> updatePostLike(@PathVariable String userId, @PathVariable Long postId) {
-        // Get the current HTTP request
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .currentRequestAttributes()).getRequest();
 
-        // Get the authenticated userId from the request attribute
-        String authenticatedUserId = (String) request.getAttribute("userId");
-
-        // Compare the authenticated userId with the userId from the path variable
-        if (!authenticatedUserId.equals(userId)) {
-            throw new ValidationException("Invalid user credential.");
-        }
-
-        PostLikeResponseDto postLikeResponseDto = postLikeService.updatePostLike(userId, postId);
-        return new ResponseEntity<>(postLikeResponseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(postLikeService.updatePostLike(userId, postId), HttpStatus.CREATED);
 
     }
 

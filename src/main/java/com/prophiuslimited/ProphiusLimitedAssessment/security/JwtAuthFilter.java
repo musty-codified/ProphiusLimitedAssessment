@@ -1,13 +1,11 @@
 package com.prophiuslimited.ProphiusLimitedAssessment.security;
 
-import com.prophiuslimited.ProphiusLimitedAssessment.dtos.responses.UserResponseDto;
-import com.prophiuslimited.ProphiusLimitedAssessment.services.UserService;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,6 +22,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final CustomUserDetailService userDetailsService;
     private final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final JwtUtils jwtUtils;
+    private final AppUtils appUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -47,13 +46,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            System.out.println(userDetails);
+            AppUserDetails userDetails = (AppUserDetails) userDetailsService.loadUserByUsername(userEmail);
+            appUtil.print(userDetails);
             final boolean isTokenValid = jwtUtils.isTokenValid(jwtToken, userDetails);
-            System.out.println(isTokenValid);
             if (isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
+//                appUtil.print(userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);

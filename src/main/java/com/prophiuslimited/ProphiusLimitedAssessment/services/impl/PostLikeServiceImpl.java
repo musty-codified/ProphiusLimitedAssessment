@@ -10,6 +10,7 @@ import com.prophiuslimited.ProphiusLimitedAssessment.repositories.PostRepository
 import com.prophiuslimited.ProphiusLimitedAssessment.repositories.UserRepository;
 import com.prophiuslimited.ProphiusLimitedAssessment.security.JwtUtils;
 import com.prophiuslimited.ProphiusLimitedAssessment.services.PostLikeService;
+import com.prophiuslimited.ProphiusLimitedAssessment.utils.AppUtils;
 import com.prophiuslimited.ProphiusLimitedAssessment.utils.Mapper;
 import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public class PostLikeServiceImpl implements PostLikeService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
 
+    private final AppUtils appUtil;
+
     private final JwtUtils jwtUtil;
     private Map<Integer, PostLike> postLikeMap = new HashMap<>();
 
@@ -42,12 +45,10 @@ public class PostLikeServiceImpl implements PostLikeService {
         userRepository.findByUserId(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found with ID: " + userId));
         Post post = postRepository.findById(postId)
-                .orElseThrow(()-> new ResourceNotFoundException("Post not found with ID: " + postId));
+                .orElseThrow(()-> new ResourceNotFoundException("Post not found "));
 
         PostLike postLike = postLikeRepository.findAllByUserIdAndPostId(userId, postId);
         logger.info("postLike " + postLike);
-
-
 
         if (postLike == null) {
             // If the postLike doesn't exist, create a new one and set its properties
@@ -62,6 +63,7 @@ public class PostLikeServiceImpl implements PostLikeService {
         } else {
             // If the postLike exists, toggle its liked status
             boolean liked = postLike.isLiked();
+            System.out.println(liked);
             postLike.setLiked(!liked);
             postLikeRepository.save(postLike);
 
@@ -72,8 +74,10 @@ public class PostLikeServiceImpl implements PostLikeService {
             }
         }
         postRepository.save(post);
-
-        return Mapper.toPostLikeDto(postLike);
+      PostLikeResponseDto postLikeResponseDto = appUtil.getMapper().convertValue(postLike, PostLikeResponseDto.class);
+      postLikeResponseDto.setPostId(postId);
+      postLikeResponseDto.setLikesCount(post.getLikesCount());
+        return postLikeResponseDto;
 
     }
 
